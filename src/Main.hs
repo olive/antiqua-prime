@@ -2,56 +2,60 @@ module Main where
 
 import qualified Graphics.UI.GLFW as GLFW
 -- everything from here starts with gl or GL
+
+import Antiqua.Graphics.TileRenderer
+import Antiqua.Graphics.Util
+import Antiqua.Graphics.Renderer
+import Antiqua.Common
+
 import Graphics.Rendering.OpenGL.Raw
 import Data.Bits ( (.|.) )
 import System.Exit ( exitWith, ExitCode(..) )
 import Control.Monad ( forever )
-import Data.Vector.Storable hiding ((++))
+import Data.Vector.Storable hiding ((++), empty)
 import Foreign ( withForeignPtr, plusPtr, peek, alloca )
-import Util ( Image(..), pngLoad )
-
 initGL :: GLFW.Window -> IO GLuint
 initGL win = do
-  glEnable gl_TEXTURE_2D
-  glShadeModel gl_SMOOTH
-  glClearColor 0 0 0 0
-  glClearDepth 1
-  glEnable gl_DEPTH_TEST
-  glDepthFunc gl_LEQUAL
-  glHint gl_PERSPECTIVE_CORRECTION_HINT gl_NICEST
-  (w,h) <- GLFW.getFramebufferSize win
-  resizeScene win w h
-  loadGLTextures
+    glEnable gl_TEXTURE_2D
+    glShadeModel gl_SMOOTH
+    glClearColor 0 0 0 0
+    glClearDepth 1
+    glEnable gl_DEPTH_TEST
+    glDepthFunc gl_LEQUAL
+    glHint gl_PERSPECTIVE_CORRECTION_HINT gl_NICEST
+    (w,h) <- GLFW.getFramebufferSize win
+    resizeScene win w h
+    loadGLTextures
 
 loadGLTextures :: IO GLuint
 loadGLTextures = do
 
-  (Image w h pd) <- pngLoad
-  tex <- alloca $ \p -> do
-    glGenTextures 1 p
-    peek p
-  let (ptr, off, _) = unsafeToForeignPtr  pd
-  withForeignPtr ptr $ \p -> do
-    let p' = p `plusPtr` off
-    glBindTexture gl_TEXTURE_2D tex
-    glTexImage2D gl_TEXTURE_2D 0 3
-      (fromIntegral w) (fromIntegral h) 0 gl_RGBA gl_UNSIGNED_BYTE
-      p'
-    let glLinear = fromIntegral gl_LINEAR
-    glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MIN_FILTER glLinear
-    glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MAG_FILTER glLinear
-  return tex
+    Image w h pd <- pngLoad
+    tex <- alloca $ \p -> do
+        glGenTextures 1 p
+        peek p
+    let (ptr, off, _) = unsafeToForeignPtr  pd
+    withForeignPtr ptr $ \p -> do
+        let p' = p `plusPtr` off
+        glBindTexture gl_TEXTURE_2D tex
+        glTexImage2D gl_TEXTURE_2D 0 3
+            (fromIntegral w) (fromIntegral h) 0 gl_RGBA gl_UNSIGNED_BYTE
+            p'
+        let glLinear = fromIntegral gl_LINEAR
+        glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MIN_FILTER glLinear
+        glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MAG_FILTER glLinear
+    return tex
 
 resizeScene :: GLFW.WindowSizeCallback
-resizeScene win w     0      = resizeScene win w 1 -- prevent divide by zero
-resizeScene _   width height = do
-  glViewport 0 0 (fromIntegral width) (fromIntegral height)
-  glMatrixMode gl_PROJECTION
-  glLoadIdentity
-  glOrtho 0 (fromIntegral width) (fromIntegral height) 0 0.1 100
-  glMatrixMode gl_MODELVIEW
-  glLoadIdentity
-  glFlush
+resizeScene win w 0 = resizeScene win w 1
+resizeScene _ width height = do
+    glViewport 0 0 (fromIntegral width) (fromIntegral height)
+    glMatrixMode gl_PROJECTION
+    glLoadIdentity
+    glOrtho 0 (fromIntegral width) (fromIntegral height) 0 0.1 100
+    glMatrixMode gl_MODELVIEW
+    glLoadIdentity
+    glFlush
 
 
 drawQuad :: (Int,Int) -> (Int,Int) -> Int -> (Int,Int) -> IO ()
@@ -79,7 +83,11 @@ drawScene tex _ = do
   glTranslatef 0 0 (-4)
   glBindTexture gl_TEXTURE_2D tex
 
-  drawQuad (100,100) (16,32) 16 (256, 256)
+  let ts = Tileset 16 16 16 16
+  let ren = Renderer tex ts
+  let tr :: TR XY (Tile Int)
+      tr = empty <+ ((0,0), Tile 10 black white) <+ ((0,1), Tile 11 black white)
+  render ren tr
 
   glFlush
 
