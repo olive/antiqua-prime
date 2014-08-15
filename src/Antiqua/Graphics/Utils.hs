@@ -1,11 +1,11 @@
-module Antiqua.Graphics.Util ( pngLoad, Image(..) ) where
+module Antiqua.Graphics.Utils where
 
 import Codec.Picture
 import GHC.Word
 
-pngLoad :: IO (Image Word8)
-pngLoad = do
-    image <- readPng "C:/Users/M/Desktop/16x16.png"
+pngLoad :: String -> IO (Image Word8)
+pngLoad file = do
+    image <- readPng file
     case image of
         Right (ImageRGBA8 (Image width height dat)) ->
             return (Image width height dat)

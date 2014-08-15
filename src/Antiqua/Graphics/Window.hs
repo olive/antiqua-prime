@@ -1,17 +1,17 @@
-module Antiqua.Graphics.Window where
+module Antiqua.Graphics.Window(
+    Window,
+    createWindow,
+    useWindow,
+    getKey
+) where
 
 import qualified Graphics.UI.GLFW as GLFW
-import Antiqua.Graphics.TileRenderer
-import Antiqua.Graphics.Util
-import Antiqua.Graphics.Renderer
 import Antiqua.Common
 
 import Graphics.Rendering.OpenGL.Raw
 import Data.Bits ( (.|.) )
 import System.Exit ( exitWith, ExitCode(..) )
 import Control.Monad ( forever )
-import Data.Vector.Storable hiding ((++), empty)
-import Foreign ( withForeignPtr, plusPtr, peek, alloca )
 
 initGL :: GLFW.Window -> IO ()
 initGL win = do
@@ -27,25 +27,7 @@ initGL win = do
     glBlendFunc gl_SRC_ALPHA gl_ONE_MINUS_SRC_ALPHA
     resizeScene win w h
 
-loadGLTextures :: IO GLuint
-loadGLTextures = do
 
-    Image w h pd <- pngLoad
-    tex <- alloca $ \p -> do
-        glGenTextures 1 p
-        peek p
-    let (ptr, off, _) = unsafeToForeignPtr  pd
-    withForeignPtr ptr $ \p -> do
-        let p' = p `plusPtr` off
-        glBindTexture gl_TEXTURE_2D tex
-        glTexImage2D gl_TEXTURE_2D 0 (fromIntegral gl_RGBA)
-            (fromIntegral w) (fromIntegral h) 0 gl_RGBA gl_UNSIGNED_BYTE
-            p'
-        let glLinear = fromIntegral gl_LINEAR
-
-        glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MIN_FILTER glLinear
-        glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MAG_FILTER glLinear
-    return tex
 
 resizeScene :: GLFW.WindowSizeCallback
 resizeScene win w 0 = resizeScene win w 1
@@ -58,19 +40,15 @@ resizeScene _ width height = do
     glLoadIdentity
     glFlush
 
-drawScene :: GLuint -> GLFW.Window -> IO ()
-drawScene tex _ = do
+drawScene :: GLuint -> IO () -> IO ()
+drawScene tex render = do
     glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                            .|. gl_DEPTH_BUFFER_BIT
     glLoadIdentity
     glTranslatef 0 0 (-5)
     glBindTexture gl_TEXTURE_2D tex
 
-    let ts = Tileset 16 16 16 16
-    let ren = Renderer tex ts
-    let tr :: TR XY (Tile Int)
-        tr = empty <+ ((0,0), Tile 11 black red) <+ ((0,1), Tile 12 red white)
-    render ren tr
+    render
 
     glFlush
 
@@ -85,8 +63,8 @@ keyPressed :: GLFW.KeyCallback
 keyPressed win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
 keyPressed _   _               _ _                     _ = return ()
 
-initWindow :: Int -> Int -> String -> IO GLFW.Window
-initWindow width height title = do
+createWindow :: Int -> Int -> String -> IO Window
+createWindow width height title = do
     True <- GLFW.init
     GLFW.defaultWindowHints
     Just win <- GLFW.createWindow width height title Nothing Nothing
@@ -95,13 +73,16 @@ initWindow width height title = do
     --GLFW.setWindowRefreshCallback win (Just (drawScene tex))
     GLFW.setFramebufferSizeCallback win (Just resizeScene)
     GLFW.setKeyCallback win (Just keyPressed)
-    return win
+    return $ Window win
 
-useWindow :: GLFW.Window -> IO () -> IO ()
-useWindow win action = do
-    tex <- loadGLTextures
+data Window = Window GLFW.Window
+
+getKey :: Window -> GLFW.Key -> IO GLFW.KeyState
+getKey (Window win) key = GLFW.getKey win key
+
+useWindow :: Window -> Texture -> IO () -> IO ()
+useWindow (Window win) text action = do
     forever $ do
         GLFW.pollEvents
-        drawScene tex win
-        action
+        drawScene text action
         GLFW.swapBuffers win
