@@ -177,54 +177,54 @@ data CP437 = C'InvSmile-- | ☺
            | C'InvExc-- | ¡
            | C'LeftAngle2-- | «
            | C'RightAngle2-- | »
-        -- | ░
-        -- | ▒
-        -- | ▓
-        -- | │
-        -- | ┤
-        -- | ╡
-        -- | ╢
-        -- | ╖
-        -- | ╕
-        -- | ╣
-        -- | ║
-        -- | ╗
-        -- | ╝
-        -- | ╜
-        -- | ╛
-        -- | ┐
-        -- | └
-        -- | ┴
-        -- | ┬
-        -- | ├
-        -- | ─
-        -- | ┼
-        -- | ╞
-        -- | ╟
-        -- | ╚
-        -- | ╔
-        -- | ╩
-        -- | ╦
-        -- | ╠
-        -- | ═
-        -- | ╬
-        -- | ╧
-        -- | ╨
-        -- | ╤
-        -- | ╥
-        -- | ╙
-        -- | ╘
-        -- | ╒
-        -- | ╓
-        -- | ╫
-        -- | ╪
-        -- | ┘
-        -- | ┌
-        -- | █
-        -- | ▄
-        -- | ▌
-        -- | ▐
-        -- | ▀
+           | C'FadeLeast-- | ░
+           | C'FadeLittle-- | ▒
+           | C'Fade-- | ▓
+           | C'Box1010-- | │
+           | C'Box1011-- | ┤
+           | C'Box1012-- | ╡
+           | C'Box2021-- | ╢
+           | C'Box0021-- | ╖
+           | C'Box0012-- | ╕
+           | C'Box2022-- | ╣
+           | C'Box2020-- | ║
+           | C'Box0022-- | ╗
+           | C'Box2002-- | ╝
+           | C'Box2001-- | ╜
+           | C'Box1002-- | ╛
+           | C'Box0011-- | ┐
+           | C'Box1100-- | └
+           | C'Box1101-- | ┴
+           | C'Box0111-- | ┬
+           | C'Box1110-- | ├
+           | C'Box0101-- | ─
+           | C'Box1111-- | ┼
+           | C'Box1210-- | ╞
+           | C'Box2120-- | ╟
+           | C'Box2200-- | ╚
+           | C'Box0220-- | ╔
+           | C'Box2202-- | ╩
+           | C'Box0222-- | ╦
+           | C'Box2220-- | ╠
+           | C'Box0202-- | ═
+           | C'Box2222-- | ╬
+           | C'Box1202-- | ╧
+           | C'Box2101-- | ╨
+           | C'Box0212-- | ╤
+           | C'Box0121-- | ╥
+           | C'Box2100-- | ╙
+           | C'Box1200-- | ╘
+           | C'Box0210-- | ╒
+           | C'Box0120-- | ╓
+           | C'Box2121-- | ╫
+           | C'Box1212-- | ╪
+           | C'Box1001-- | ┘
+           | C'Box0110-- | ┌
+           | C'Full-- | █
+           | C'SolidDown-- | ▄
+           | C'SolidRight-- | ▌
+           | C'SolidLeft-- | ▐
+           | C'SolidTop-- | ▀
            | C'α
            | C'β
            | C'Γ
@@ -433,6 +433,54 @@ instance Code CP437 where
     getIndex C'InvExc = 173
     getIndex C'LeftAngle2 = 174
     getIndex C'RightAngle2 = 175
+    getIndex C'FadeLeast = 176
+    getIndex C'FadeLittle = 177
+    getIndex C'Fade = 178
+    getIndex C'Box1010 = 179
+    getIndex C'Box1011 = 180
+    getIndex C'Box1012 = 181
+    getIndex C'Box2021 = 182
+    getIndex C'Box0021 = 183
+    getIndex C'Box0012 = 184
+    getIndex C'Box2022 = 185
+    getIndex C'Box2020 = 186
+    getIndex C'Box0022 = 187
+    getIndex C'Box2002 = 188
+    getIndex C'Box2001 = 189
+    getIndex C'Box1002 = 190
+    getIndex C'Box0011 = 191
+    getIndex C'Box1100 = 192
+    getIndex C'Box1101 = 193
+    getIndex C'Box0111 = 194
+    getIndex C'Box1110 = 195
+    getIndex C'Box0101 = 196
+    getIndex C'Box1111 = 197
+    getIndex C'Box1210 = 198
+    getIndex C'Box2120 = 199
+    getIndex C'Box2200 = 200
+    getIndex C'Box0220 = 201
+    getIndex C'Box2202 = 202
+    getIndex C'Box0222 = 203
+    getIndex C'Box2220 = 204
+    getIndex C'Box0202 = 205
+    getIndex C'Box2222 = 206
+    getIndex C'Box1202 = 207
+    getIndex C'Box2101 = 208
+    getIndex C'Box0212 = 209
+    getIndex C'Box0121 = 210
+    getIndex C'Box2100 = 211
+    getIndex C'Box1200 = 212
+    getIndex C'Box0210 = 213
+    getIndex C'Box0120 = 214
+    getIndex C'Box2121 = 215
+    getIndex C'Box1212 = 216
+    getIndex C'Box1001 = 217
+    getIndex C'Box0110 = 218
+    getIndex C'Full = 219
+    getIndex C'SolidDown = 220
+    getIndex C'SolidRight = 221
+    getIndex C'SolidLeft = 222
+    getIndex C'SolidTop = 223
     getIndex C'α = 224
     getIndex C'β = 225
     getIndex C'Γ = 226
@@ -464,3 +512,258 @@ instance Code CP437 where
     getIndex C'Nth = 252
     getIndex C'Squared = 253
     getIndex C'LargeSquare = 254
+
+    fromChar '☺' = C'InvSmile
+    fromChar '☻' = C'Smile
+    fromChar '♥' = C'Heart
+    fromChar '♦' = C'Diamond
+    fromChar '♣' = C'Club
+    fromChar '♠' = C'Spade
+    fromChar '●' = C'Disc
+    fromChar '◘' = C'InvDisc
+    fromChar '◦' = C'Circle
+    fromChar '◙' = C'InvCircle
+    fromChar '♂' = C'Mars
+    fromChar '♀' = C'Venus
+    fromChar '♪' = C'Note
+    fromChar '♫' = C'DoubleNote
+    fromChar '☼' = C'Sun
+    fromChar '►' = C'TriRight
+    fromChar '◄' = C'TriLeft
+    fromChar '↕' = C'Vertical
+    fromChar '‼' = C'DoubleExc
+    fromChar '¶' = C'Pilcrow
+    fromChar '§' = C'Section
+    fromChar '‗' = C'LowLine
+    fromChar '↨' = C'Vertical2
+    fromChar '↑' = C'Up
+    fromChar '↓' = C'Down
+    fromChar '→' = C'Right
+    fromChar '←' = C'Left
+    fromChar '∟' = C'RightAngle
+    fromChar '↔' = C'Horizontal
+    fromChar '▲' = C'TriUp
+    fromChar '▼' = C'TriDown
+    fromChar ' ' = C'Space
+    fromChar '!' = C'Exclamation
+    fromChar '"' = C'DoubleQuote
+    fromChar '#' = C'Hashtag
+    fromChar '$' = C'Dollar
+    fromChar '%' = C'Percent
+    fromChar '&' = C'And
+    fromChar '\''= C'Quote
+    fromChar '(' = C'OpenParen
+    fromChar ')' = C'CloseParen
+    fromChar '*' = C'Asterisk
+    fromChar '+' = C'Plus
+    fromChar ',' = C'Comma
+    fromChar '-' = C'Minus
+    fromChar '.' = C'Period
+    fromChar '/' = C'Slash
+    fromChar '0' = C'0
+    fromChar '1' = C'1
+    fromChar '2' = C'2
+    fromChar '3' = C'3
+    fromChar '4' = C'4
+    fromChar '5' = C'5
+    fromChar '6' = C'6
+    fromChar '7' = C'7
+    fromChar '8' = C'8
+    fromChar '9' = C'9
+    fromChar ':' = C'Colon
+    fromChar ';' = C'Semi
+    fromChar '<' = C'Less
+    fromChar '=' = C'Eq
+    fromChar '>' = C'Greater
+    fromChar '?' = C'Question
+    fromChar '@' = C'At
+    fromChar 'A' = C'A
+    fromChar 'B' = C'B
+    fromChar 'C' = C'C
+    fromChar 'D' = C'D
+    fromChar 'E' = C'E
+    fromChar 'F' = C'F
+    fromChar 'G' = C'G
+    fromChar 'H' = C'H
+    fromChar 'I' = C'I
+    fromChar 'J' = C'J
+    fromChar 'K' = C'K
+    fromChar 'L' = C'L
+    fromChar 'M' = C'M
+    fromChar 'N' = C'N
+    fromChar 'O' = C'O
+    fromChar 'P' = C'P
+    fromChar 'Q' = C'Q
+    fromChar 'R' = C'R
+    fromChar 'S' = C'S
+    fromChar 'T' = C'T
+    fromChar 'U' = C'U
+    fromChar 'V' = C'V
+    fromChar 'W' = C'W
+    fromChar 'X' = C'X
+    fromChar 'Y' = C'Y
+    fromChar 'Z' = C'Z
+    fromChar '[' = C'OpenSquare
+    fromChar '\\'= C'Backslash
+    fromChar ']' = C'CloseSquare
+    fromChar '^' = C'Caret
+    fromChar '_' = C'_
+    fromChar '`' = C'Backquote
+    fromChar 'a' = C'a
+    fromChar 'b' = C'b
+    fromChar 'c' = C'c
+    fromChar 'd' = C'd
+    fromChar 'e' = C'e
+    fromChar 'f' = C'f
+    fromChar 'g' = C'g
+    fromChar 'h' = C'h
+    fromChar 'i' = C'i
+    fromChar 'j' = C'j
+    fromChar 'k' = C'k
+    fromChar 'l' = C'l
+    fromChar 'm' = C'm
+    fromChar 'n' = C'n
+    fromChar 'o' = C'o
+    fromChar 'p' = C'p
+    fromChar 'q' = C'q
+    fromChar 'r' = C'r
+    fromChar 's' = C's
+    fromChar 't' = C't
+    fromChar 'u' = C'u
+    fromChar 'v' = C'v
+    fromChar 'w' = C'w
+    fromChar 'x' = C'x
+    fromChar 'y' = C'y
+    fromChar 'z' = C'z
+    fromChar '{' = C'OpenCurly
+    fromChar '|' = C'Pipe
+    fromChar '}' = C'CloseCurly
+    fromChar '~' = C'Tilde
+    fromChar '⌂' = C'House
+    fromChar 'Ç' = C'Ç
+    fromChar 'ü' = C'ü
+    fromChar 'é' = C'é
+    fromChar 'â' = C'â
+    fromChar 'ä' = C'ä
+    fromChar 'à' = C'à
+    fromChar 'å' = C'å
+    fromChar 'ç' = C'ç
+    fromChar 'ê' = C'ê
+    fromChar 'ë' = C'ë
+    fromChar 'è' = C'è
+    fromChar 'ï' = C'ï
+    fromChar 'î' = C'î
+    fromChar 'ì' = C'ì
+    fromChar 'Ä' = C'Ä
+    fromChar 'Å' = C'Å
+    fromChar 'É' = C'É
+    fromChar 'æ' = C'æ
+    fromChar 'Æ' = C'Æ
+    fromChar 'ô' = C'ô
+    fromChar 'ö' = C'ö
+    fromChar 'ò' = C'ò
+    fromChar 'û' = C'û
+    fromChar 'ù' = C'ù
+    fromChar 'ÿ' = C'ÿ
+    fromChar 'Ö' = C'Ö
+    fromChar 'Ü' = C'Ü
+    fromChar '¢' = C'Cent
+    fromChar '£' = C'Pound
+    fromChar '¥' = C'Yen
+    fromChar '₧' = C'Peseta
+    fromChar 'ƒ' = C'ƒ
+    fromChar 'á' = C'á
+    fromChar 'í' = C'í
+    fromChar 'ó' = C'ó
+    fromChar 'ú' = C'ú
+    fromChar 'ñ' = C'ñ
+    fromChar 'Ñ' = C'Ñ
+    fromChar 'ª' = C'Feminine
+    fromChar 'º' = C'Masculine
+    fromChar '¿' = C'InvQuestion
+    fromChar '⌐' = C'InvNot
+    fromChar '¬' = C'Not
+    fromChar '½' = C'Half
+    fromChar '¼' = C'Fourth
+    fromChar '¡' = C'InvExc
+    fromChar '«' = C'LeftAngle2
+    fromChar '»' = C'RightAngle2
+    fromChar '░' = C'FadeLeast
+    fromChar '▒' = C'FadeLittle
+    fromChar '▓' = C'Fade
+    fromChar '│' = C'Box1010
+    fromChar '┤' = C'Box1011
+    fromChar '╡' = C'Box1012
+    fromChar '╢' = C'Box2021
+    fromChar '╖' = C'Box0021
+    fromChar '╕' = C'Box0012
+    fromChar '╣' = C'Box2022
+    fromChar '║' = C'Box2020
+    fromChar '╗' = C'Box0022
+    fromChar '╝' = C'Box2002
+    fromChar '╜' = C'Box2001
+    fromChar '╛' = C'Box1002
+    fromChar '┐' = C'Box0011
+    fromChar '└' = C'Box1100
+    fromChar '┴' = C'Box1101
+    fromChar '┬' = C'Box0111
+    fromChar '├' = C'Box1110
+    fromChar '─' = C'Box0101
+    fromChar '┼' = C'Box1111
+    fromChar '╞' = C'Box1210
+    fromChar '╟' = C'Box2120
+    fromChar '╚' = C'Box2200
+    fromChar '╔' = C'Box0220
+    fromChar '╩' = C'Box2202
+    fromChar '╦' = C'Box0222
+    fromChar '╠' = C'Box2220
+    fromChar '═' = C'Box0202
+    fromChar '╬' = C'Box2222
+    fromChar '╧' = C'Box1202
+    fromChar '╨' = C'Box2101
+    fromChar '╤' = C'Box0212
+    fromChar '╥' = C'Box0121
+    fromChar '╙' = C'Box2100
+    fromChar '╘' = C'Box1200
+    fromChar '╒' = C'Box0210
+    fromChar '╓' = C'Box0120
+    fromChar '╫' = C'Box2121
+    fromChar '╪' = C'Box1212
+    fromChar '┘' = C'Box1001
+    fromChar '┌' = C'Box0110
+    fromChar '█' = C'Full
+    fromChar '▄' = C'SolidDown
+    fromChar '▌' = C'SolidRight
+    fromChar '▐' = C'SolidLeft
+    fromChar '▀' = C'SolidTop
+    fromChar 'α' = C'α
+    fromChar 'β' = C'β
+    fromChar 'Γ' = C'Γ
+    fromChar 'π' = C'π
+    fromChar 'Σ' = C'Σ
+    fromChar 'σ' = C'σ
+    fromChar 'μ' = C'μ
+    fromChar 'τ' = C'τ
+    fromChar 'Φ' = C'Φ
+    fromChar 'Θ' = C'Θ
+    fromChar 'Ω' = C'Ω
+    fromChar 'δ' = C'δ
+    fromChar '∞' = C'Inf
+    fromChar 'φ' = C'φ
+    fromChar 'ϵ' = C'ϵ
+    fromChar '∩' = C'Intersect
+    fromChar '≡' = C'TripleBar
+    fromChar '±' = C'PlusMinus
+    fromChar '≥' = C'GreaterEq
+    fromChar '≤' = C'LessEq
+    fromChar '⌠' = C'IntegralTop
+    fromChar '⌡' = C'IntegralBottom
+    fromChar '÷' = C'Obelus
+    fromChar '≈' = C'ApproxEq
+    fromChar '°' = C'Degree
+    fromChar '▪' = C'SmallSquare
+    fromChar '·' = C'Dot
+    fromChar '√' = C'Check
+    fromChar 'ⁿ' = C'Nth
+    fromChar '²' = C'Squared
+    fromChar '■' = C'LargeSquare
