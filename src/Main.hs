@@ -1,103 +1,58 @@
 module Main where
 
+import Antiqua.Graphics.Window
 import qualified Graphics.UI.GLFW as GLFW
--- everything from here starts with gl or GL
 
-import Antiqua.Graphics.TileRenderer
-import Antiqua.Graphics.Util
-import Antiqua.Graphics.Renderer
-import Antiqua.Common
+class Control a t where
+    update :: a -> GLFW.Window -> IO a
+    isPressed :: a -> t
+    justPressed :: a -> t
+    justReleased :: a -> t
+    zips :: a -> Int -> Int -> t
 
-import Graphics.Rendering.OpenGL.Raw
-import Data.Bits ( (.|.) )
-import System.Exit ( exitWith, ExitCode(..) )
-import Control.Monad ( forever )
-import Data.Vector.Storable hiding ((++), empty)
-import Foreign ( withForeignPtr, plusPtr, peek, alloca )
-initGL :: GLFW.Window -> IO GLuint
-initGL win = do
-    glEnable gl_TEXTURE_2D
-    glShadeModel gl_SMOOTH
-    glClearColor 1 1 0 0
-    glClearDepth 1
-    glEnable gl_DEPTH_TEST
-    glDepthFunc gl_LEQUAL
-    glHint gl_PERSPECTIVE_CORRECTION_HINT gl_NICEST
-    (w,h) <- GLFW.getFramebufferSize win
-    glEnable gl_BLEND
-    glBlendFunc gl_SRC_ALPHA gl_ONE_MINUS_SRC_ALPHA
-    resizeScene win w h
-    loadGLTextures
+class Trigger t where
+    tisPressed :: t ->  GLFW.Window ->IO Bool
 
-loadGLTextures :: IO GLuint
-loadGLTextures = do
+data AnyTrigger = KeyTrigger GLFW.Key
+               -- | JoyTrigger
+instance Trigger AnyTrigger where
+    tisPressed (KeyTrigger a) win = do
+        state <- GLFW.getKey win a
+        return $ state == GLFW.KeyState'Pressed
 
-    Image w h pd <- pngLoad
-    tex <- alloca $ \p -> do
-        glGenTextures 1 p
-        peek p
-    let (ptr, off, _) = unsafeToForeignPtr  pd
-    withForeignPtr ptr $ \p -> do
-        let p' = p `plusPtr` off
-        glBindTexture gl_TEXTURE_2D tex
-        glTexImage2D gl_TEXTURE_2D 0 (fromIntegral gl_RGBA)
-            (fromIntegral w) (fromIntegral h) 0 gl_RGBA gl_UNSIGNED_BYTE
-            p'
-        let glLinear = fromIntegral gl_LINEAR
 
-        glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MIN_FILTER glLinear
-        glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MAG_FILTER glLinear
-    return tex
+data TriggerAggregate where
+    TriggerAggregate :: Int -> Int -> [AnyTrigger] -> TriggerAggregate
+getFlag :: TriggerAggregate -> Int
+getFlag (TriggerAggregate _ flag _) = flag
 
-resizeScene :: GLFW.WindowSizeCallback
-resizeScene win w 0 = resizeScene win w 1
-resizeScene _ width height = do
-    glViewport 0 0 (fromIntegral width) (fromIntegral height)
-    glMatrixMode gl_PROJECTION
-    glLoadIdentity
-    glOrtho 0 (fromIntegral width) (fromIntegral height) 0 0.1 100
-    glMatrixMode gl_MODELVIEW
-    glLoadIdentity
-    glFlush
+getPrev :: TriggerAggregate -> Int
+getPrev (TriggerAggregate prev _ _) = prev
 
-drawScene :: GLuint -> GLFW.Window -> IO ()
-drawScene tex _ = do
-    glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
-                           .|. gl_DEPTH_BUFFER_BIT
-    glLoadIdentity
-    glTranslatef 0 0 (-5)
-    glBindTexture gl_TEXTURE_2D tex
+instance Control (TriggerAggregate) Bool where
+    update (TriggerAggregate _ flag ts) win = do
+        let np = flag
+        ps <- mapM ((flip tisPressed) win) ts
+        let nf = if any id ps
+                 then flag + 1
+                 else 0
+        return $ TriggerAggregate np nf ts
+    isPressed ta = getFlag ta > 0
+    justPressed ta = getFlag ta > 0 && getPrev ta == 0
+    justReleased ta = getFlag ta == 0 && getPrev ta > 0
+    zips ta start inc =
+        let flag = getFlag ta in
+        justPressed ta || (flag > start && flag `mod` inc == 0)
+-- make controls an HList indexed by a
+data Controls where
+    Controls :: Control a k => [a] -> k -> Controls
 
-    let ts = Tileset 16 16 16 16
-    let ren = Renderer tex ts
-    let tr :: TR XY (Tile Int)
-        tr = empty <+ ((0,0), Tile 11 black red) <+ ((0,1), Tile 12 red white)
-    render ren tr
 
-    glFlush
-
-shutdown :: GLFW.WindowCloseCallback
-shutdown win = do
-    GLFW.destroyWindow win
-    GLFW.terminate
-    exitWith ExitSuccess
-    return ()
-
-keyPressed :: GLFW.KeyCallback
-keyPressed win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
-keyPressed _   _               _ _                     _ = return ()
+getInput :: IO Controls
+getInput = undefined
 
 main :: IO ()
 main = do
-    True <- GLFW.init
-    GLFW.defaultWindowHints
-    Just win <- GLFW.createWindow 256 256 "antiqua-prime" Nothing Nothing
-    GLFW.makeContextCurrent (Just win)
-    tex <- initGL win
-    GLFW.setWindowRefreshCallback win (Just (drawScene tex))
-    GLFW.setFramebufferSizeCallback win (Just resizeScene)
-    GLFW.setKeyCallback win (Just keyPressed)
-    forever $ do
-        GLFW.pollEvents
-        drawScene tex win
-        GLFW.swapBuffers win
+    win <- initWindow 256 256 "Antiqua Prime"
+    useWindow win (return ())
+
