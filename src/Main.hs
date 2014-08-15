@@ -18,7 +18,7 @@ initGL :: GLFW.Window -> IO GLuint
 initGL win = do
     glEnable gl_TEXTURE_2D
     glShadeModel gl_SMOOTH
-    glClearColor 0 0 0 0
+    glClearColor 1 1 0 0
     glClearDepth 1
     glEnable gl_DEPTH_TEST
     glDepthFunc gl_LEQUAL
@@ -40,10 +40,11 @@ loadGLTextures = do
     withForeignPtr ptr $ \p -> do
         let p' = p `plusPtr` off
         glBindTexture gl_TEXTURE_2D tex
-        glTexImage2D gl_TEXTURE_2D 0 3
+        glTexImage2D gl_TEXTURE_2D 0 (fromIntegral gl_RGBA)
             (fromIntegral w) (fromIntegral h) 0 gl_RGBA gl_UNSIGNED_BYTE
             p'
         let glLinear = fromIntegral gl_LINEAR
+
         glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MIN_FILTER glLinear
         glTexParameteri gl_TEXTURE_2D gl_TEXTURE_MAG_FILTER glLinear
     return tex
@@ -64,13 +65,13 @@ drawScene tex _ = do
     glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                            .|. gl_DEPTH_BUFFER_BIT
     glLoadIdentity
-    glTranslatef 0 0 (-4)
+    glTranslatef 0 0 (-5)
     glBindTexture gl_TEXTURE_2D tex
 
     let ts = Tileset 16 16 16 16
     let ren = Renderer tex ts
     let tr :: TR XY (Tile Int)
-        tr = empty <+ ((0,0), Tile 10 black red) <+ ((0,1), Tile 11 red white)
+        tr = empty <+ ((0,0), Tile 11 black red) <+ ((0,1), Tile 12 red white)
     render ren tr
 
     glFlush
