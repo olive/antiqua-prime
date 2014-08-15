@@ -7,34 +7,37 @@ import Antiqua.Common
 import qualified Antiqua.Control.Concurrent.Updater as Up
 import Antiqua.Graphics.Assets
 import Antiqua.Input.Controls
-
+import Antiqua.Game
 getInput :: Controls a -> Window -> IO (Controls a)
 getInput (Controls xs) win = do
     updated <- mapM ((flip update) win) xs
     return (Controls updated)
 
 
-loop :: (Up.Updater u, Drawable u)
+
+loop :: (Drawable g, Game g (Controls a, Assets, Window))
      => Controls a
      -> Window
-     -> u
+     -> Up.AsyncUpdater g
      -> Texture
      -> IO ()
 loop controls win state tex = do
     newControls <- getInput controls win
+    let assets = undefined :: Assets
     let ren = draw state tex
-    newState <- Up.get state
+    newState <- Up.get state (newControls, assets, win)
     useWindow win tex ren
     loop newControls win newState tex
 
 
 data GameState = GameState
 
-instance Up.Updatable GameState where
-    update = return . id
 
-class Drawable a where
-    draw :: a -> (Texture -> IO ())
+instance Game g a => Game (Up.AsyncUpdater g) a where
+    runFrame (Up.AsyncUpdater w f) args =
+        (Up.AsyncUpdater (runFrame w args) f)
+
+
 
 instance Drawable a => Drawable (Up.AsyncUpdater a) where
     draw (Up.AsyncUpdater w _) tex = draw w tex
@@ -48,11 +51,14 @@ instance Drawable GameState where
                        <+ ((0,1), Tile 12 red white)
         render ren tr
 
+instance Game GameState b where
+    runFrame g _ = g
 
 main :: IO ()
 main = do
     win <- createWindow 256 256 "Antiqua Prime"
     let controls = Controls [] :: Controls TriggerAggregate
     tex <- loadTexture "C:/Users/M/Desktop/16x16.png"
-    gs <- Up.mkUpdater GameState
+    let assets = undefined :: Assets
+    gs <- Up.mkUpdater GameState (controls, assets, win)
     loop controls win gs tex
