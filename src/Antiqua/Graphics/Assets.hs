@@ -5,7 +5,6 @@ import Data.Vector.Storable hiding ((++), empty)
 import Foreign ( withForeignPtr, plusPtr, peek, alloca )
 import Graphics.Rendering.OpenGL.Raw
 
-
 import Antiqua.Common
 import Antiqua.Graphics.Utils
 
@@ -15,7 +14,7 @@ loadTexture s = do
     tex <- alloca $ \p -> do
         glGenTextures 1 p
         peek p
-    let (ptr, off, _) = unsafeToForeignPtr  pd
+    let (ptr, off, _) = unsafeToForeignPtr pd
     withForeignPtr ptr $ \p -> do
         let p' = p `plusPtr` off
         glBindTexture gl_TEXTURE_2D tex
