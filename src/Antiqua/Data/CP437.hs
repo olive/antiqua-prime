@@ -65,7 +65,7 @@ data CP437 = C'InvSmile-- | ☺
            | C'Eq-- | =
            | C'Greater-- | >
            | C'Question-- | ?
-           | C'At-- | @
+           | C'Rogue-- | @
            | C'A
            | C'B
            | C'C
@@ -576,7 +576,7 @@ instance Code CP437 where
     fromChar '=' = C'Eq
     fromChar '>' = C'Greater
     fromChar '?' = C'Question
-    fromChar '@' = C'At
+    fromChar '@' = C'Rogue
     fromChar 'A' = C'A
     fromChar 'B' = C'B
     fromChar 'C' = C'C

@@ -1,5 +1,8 @@
 module Main where
 
+import qualified Sound.OpenAL as AL
+import qualified Sound.ALUT.Loaders as AL
+import qualified Sound.ALUT.Initialization as AL
 import Antiqua.Graphics.Window
 import Antiqua.Graphics.Renderer
 import Antiqua.Graphics.TileRenderer
@@ -47,12 +50,44 @@ instance Drawable GameState where
 instance Game GameState b where
     runFrame g _ = g
 
-main :: IO ()
-main = do
+class Audio k a where
+    setGlobalVolume :: a -> Double -> IO ()
+    getGlobalVolume :: a -> IO Double
+    setVolume :: a -> k -> Double -> IO ()
+    getVolume :: a -> k -> IO Double
+    load :: a -> k -> FilePath -> IO a
+    dispose :: a -> k -> IO ()
+    play :: a -> k -> IO ()
+    pause :: a -> k -> IO ()
+    stop :: a -> k -> IO ()
+    setPos :: a -> k -> Int -> IO ()
+    isPlaying :: a -> k -> IO Bool
+
+mainLoop :: IO ()
+mainLoop = do
     win <- createWindow 256 256 "Antiqua Prime"
     let controls = Controls [] :: Controls TriggerAggregate
-    tex <- loadTexture "C:/Users/M/Desktop/16x16.png"
+    tex <- loadTexture "../16x16.png"
     let assets = undefined :: Assets
     let state = GameState
     gs <- Up.mkUpdater state (controls, assets, win)
     loop controls win gs tex
+
+main :: IO ()
+main = do
+    AL.withProgNameAndArgs AL.runALUTUsingCurrentContext  $ \_ _ ->
+     do
+        (Just device) <- AL.openDevice Nothing
+        (Just context) <- AL.createContext device []
+        AL.currentContext AL.$= Just context
+        buffer1 <- AL.createBuffer $ AL.File "../freealut-bin/file1.wav"
+        buffer2 <- AL.createBuffer AL.HelloWorld
+        [source] <- AL.genObjectNames 1
+        AL.queueBuffers source [buffer1,buffer2]
+        AL.play [source]
+        mainLoop
+        AL.closeDevice device
+        return ()
+
+
+
