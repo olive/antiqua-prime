@@ -13,7 +13,6 @@ import Antiqua.Graphics.TileRenderer
 import Antiqua.Common
 
 data Tileset = Tileset Int Int Int Int
-type Texture = GLuint
 data Renderer = Renderer Texture Tileset
 
 drawBg :: Code c => Tileset -> XY -> Tile c -> IO ()
