@@ -6,8 +6,11 @@ import Antiqua.Graphics.TileRenderer
 import Antiqua.Common
 import qualified Antiqua.Control.Concurrent.Updater as Up
 import Antiqua.Graphics.Assets
+import Antiqua.Graphics.Tile
 import Antiqua.Input.Controls
 import Antiqua.Game
+import Antiqua.Data.CP437
+
 getInput :: Controls a -> Window -> IO (Controls a)
 getInput (Controls xs) win = do
     updated <- mapM ((flip update) win) xs
@@ -32,23 +35,13 @@ loop controls win state tex = do
 
 data GameState = GameState
 
-
-instance Game g a => Game (Up.AsyncUpdater g) a where
-    runFrame (Up.AsyncUpdater w f) args =
-        (Up.AsyncUpdater (runFrame w args) f)
-
-
-
-instance Drawable a => Drawable (Up.AsyncUpdater a) where
-    draw (Up.AsyncUpdater w _) tex = draw w tex
-
 instance Drawable GameState where
     draw GameState tex = do
         let ts = Tileset 16 16 16 16
         let ren = Renderer tex ts
-        let tr :: TR XY (Tile Int)
-            tr = empty <+ ((0,0), Tile 11 black red)
-                       <+ ((0,1), Tile 12 red white)
+        let tr :: TR XY (Tile CP437)
+            tr = empty <+ ((0,0), Tile C'A black red)
+                       <+ ((0,1), Tile C'B red white)
         render ren tr
 
 instance Game GameState b where
@@ -60,5 +53,6 @@ main = do
     let controls = Controls [] :: Controls TriggerAggregate
     tex <- loadTexture "C:/Users/M/Desktop/16x16.png"
     let assets = undefined :: Assets
-    gs <- Up.mkUpdater GameState (controls, assets, win)
+    let state = GameState
+    gs <- Up.mkUpdater state (controls, assets, win)
     loop controls win gs tex

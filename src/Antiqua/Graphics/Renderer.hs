@@ -10,6 +10,7 @@ import Graphics.Rendering.OpenGL.Raw
 import qualified Data.Map as Map
 
 import Antiqua.Graphics.TileRenderer
+import Antiqua.Graphics.Tile
 import Antiqua.Common
 
 data Tileset = Tileset Int Int Int Int

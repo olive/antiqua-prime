@@ -31,6 +31,6 @@ instance Game a b => Updater (AsyncUpdater a) b where
         nau <- handle s f p
         return nau
 
-
-
+instance Drawable a => Drawable (AsyncUpdater a) where
+    draw (AsyncUpdater w _) tex = draw w tex
 
