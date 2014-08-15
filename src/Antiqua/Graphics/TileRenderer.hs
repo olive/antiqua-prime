@@ -2,7 +2,6 @@ module Antiqua.Graphics.TileRenderer where
 
 import Prelude hiding (foldl)
 
-import GHC.Word
 import qualified Data.Map as Map
 import Data.Foldable
 import Control.Monad
@@ -15,6 +14,9 @@ black = (0,0,0,255)
 
 white :: Color
 white = (255,255,255,255)
+
+red :: Color
+red = (255, 0, 0, 255)
 
 class Code c where
     getIndex :: c -> Int

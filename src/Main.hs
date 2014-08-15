@@ -24,6 +24,8 @@ initGL win = do
     glDepthFunc gl_LEQUAL
     glHint gl_PERSPECTIVE_CORRECTION_HINT gl_NICEST
     (w,h) <- GLFW.getFramebufferSize win
+    glEnable gl_BLEND
+    glBlendFunc gl_SRC_ALPHA gl_ONE_MINUS_SRC_ALPHA
     resizeScene win w h
     loadGLTextures
 
@@ -57,46 +59,28 @@ resizeScene _ width height = do
     glLoadIdentity
     glFlush
 
-
-drawQuad :: (Int,Int) -> (Int,Int) -> Int -> (Int,Int) -> IO ()
-drawQuad (x, y) (tx, ty) tSize (tw, th) = do
-    let (tx', ty') = (fromIntegral tx / fromIntegral tw, fromIntegral ty / fromIntegral th)
-    let (x', y') = (fromIntegral x, fromIntegral y)
-    let (tw', th') = (fromIntegral tSize / fromIntegral tw, fromIntegral tSize / fromIntegral th)
-    let (xw', yh') = (fromIntegral tSize, fromIntegral tSize)
-    glBegin gl_QUADS
-    glTexCoord2f   tx'    (ty' + th')
-    glVertex2f     x'    (y' + yh')
-    glTexCoord2f   (tx' + tw')    (ty' + th')
-    glVertex2f     (x' + xw')    (y' + yh')
-    glTexCoord2f   (tx' + tw')    ty'
-    glVertex2f     (x' + xw')    y'
-    glTexCoord2f   tx'    ty'
-    glVertex2f     x'    y'
-    glEnd
-
 drawScene :: GLuint -> GLFW.Window -> IO ()
 drawScene tex _ = do
-  glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
-                         .|. gl_DEPTH_BUFFER_BIT
-  glLoadIdentity
-  glTranslatef 0 0 (-4)
-  glBindTexture gl_TEXTURE_2D tex
+    glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
+                           .|. gl_DEPTH_BUFFER_BIT
+    glLoadIdentity
+    glTranslatef 0 0 (-4)
+    glBindTexture gl_TEXTURE_2D tex
 
-  let ts = Tileset 16 16 16 16
-  let ren = Renderer tex ts
-  let tr :: TR XY (Tile Int)
-      tr = empty <+ ((0,0), Tile 10 black white) <+ ((0,1), Tile 11 black white)
-  render ren tr
+    let ts = Tileset 16 16 16 16
+    let ren = Renderer tex ts
+    let tr :: TR XY (Tile Int)
+        tr = empty <+ ((0,0), Tile 10 black red) <+ ((0,1), Tile 11 red white)
+    render ren tr
 
-  glFlush
+    glFlush
 
 shutdown :: GLFW.WindowCloseCallback
 shutdown win = do
-  GLFW.destroyWindow win
-  GLFW.terminate
-  exitWith ExitSuccess
-  return ()
+    GLFW.destroyWindow win
+    GLFW.terminate
+    exitWith ExitSuccess
+    return ()
 
 keyPressed :: GLFW.KeyCallback
 keyPressed win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
