@@ -24,6 +24,10 @@ instance Trigger AnyTrigger where
 
 data TriggerAggregate where
     TriggerAggregate :: Int -> Int -> [AnyTrigger] -> TriggerAggregate
+
+mkTriggerAggregate :: [AnyTrigger] -> TriggerAggregate
+mkTriggerAggregate = TriggerAggregate 0 0
+
 getFlag :: TriggerAggregate -> Int
 getFlag (TriggerAggregate _ flag _) = flag
 
@@ -48,3 +52,5 @@ instance Control TriggerAggregate where
 data Controls a where
     Controls :: Control a => [a] -> Controls a
 
+firstGet :: Control a => Controls a -> a
+firstGet (Controls (x:_)) = x
