@@ -2,54 +2,53 @@ module Antiqua.Data.CP437 where
 
 import Antiqua.Common
 
-data CP437 = C'InvSmile-- | ☺
-           | C'Smile-- | ☻
-           | C'Heart-- | ♥
-           | C'Diamond-- | ♦
-           | C'Club-- | ♣
-           | C'Spade-- | ♠
-           | C'Disc-- | ●
-           | C'InvDisc-- | ◘
-           | C'Circle-- | ◦
-           | C'InvCircle-- | ◙
-           | C'Mars-- | ♂
-           | C'Venus-- | ♀
-           | C'Note-- | ♪
-           | C'DoubleNote-- | ♫
-           | C'Sun-- | ☼
-           | C'TriRight-- | ►
-           | (►)
-           | C'TriLeft-- | ◄
-           | C'Vertical-- | ↕
-           | C'DoubleExc-- | ‼
-           | C'Pilcrow-- | ¶
-           | C'Section-- | §
-           | C'LowLine-- | ‗
-           | C'Vertical2-- | ↨
-           | C'Up-- | ↑
-           | C'Down-- | ↓
-           | C'Right-- | →
-           | C'Left-- | ←
-           | C'RightAngle-- | ∟
-           | C'Horizontal-- | ↔
-           | C'TriUp-- | ▲
-           | C'TriDown-- | ▼
-           | C'Space-- |
-           | C'Exclamation-- | !
-           | C'DoubleQuote-- | "
-           | C'Hashtag-- | #
-           | C'Dollar-- | $
-           | C'Percent-- | %
-           | C'And-- | &
-           | C'Quote-- | '
-           | C'OpenParen-- | (
-           | C'CloseParen-- | )
-           | C'Asterisk-- | *
-           | C'Plus-- | +
-           | C'Comma-- | ,
-           | C'Minus-- | -
-           | C'Period-- | .
-           | C'Slash-- | /
+data CP437 = (:☺)
+           | (:☻)
+           | (:♥)
+           | (:♦)
+           | (:♣)
+           | (:♠)
+           | (:●)
+           | (:◘)
+           | (:◦)
+           | (:◙)
+           | (:♂)
+           | (:♀)
+           | (:♪)
+           | (:♫)
+           | (:☼)
+           | (:►)
+           | (:◄)
+           | (:↕)
+           | (:‼)
+           | (:¶)
+           | (:§)
+           | (:‗)
+           | (:↨)
+           | (:↑)
+           | (:↓)
+           | (:→)
+           | (:←)
+           | (:∟)
+           | (:↔)
+           | (:▲)
+           | (:▼)
+           | C'Space
+           | (:!)
+           | C'DoubleQuote
+           | (:#)
+           | (:$)
+           | (:%)
+           | (:&)
+           | C'SingleQuote
+           | C'OpenParen
+           | C'CloseParen
+           | (:*)
+           | (:+)
+           | C'Comma
+           | (:-)
+           | (:.)
+           | (:/)
            | C'0
            | C'1
            | C'2
@@ -62,11 +61,11 @@ data CP437 = C'InvSmile-- | ☺
            | C'9
            | C'Colon-- | :
            | C'Semi-- | ;
-           | C'Less-- | <
-           | C'Eq-- | =
-           | C'Greater-- | >
-           | C'Question-- | ?
-           | C'Rogue-- | @
+           | (:<)-- | <
+           | (:=)-- | =
+           | (:>)-- | >
+           | (:?)-- | ?
+           | (:@)-- | @
            | C'A
            | C'B
            | C'C
@@ -94,9 +93,9 @@ data CP437 = C'InvSmile-- | ☺
            | C'Y
            | C'Z
            | C'OpenSquare-- | [
-           | C'Backslash-- | \
+           | (:\)
            | C'CloseSquare-- | ]
-           | C'Caret-- | ^
+           | (:^)
            | C'_
            | C'Backquote -- | `
            | C'a
@@ -126,10 +125,10 @@ data CP437 = C'InvSmile-- | ☺
            | C'y
            | C'z
            | C'OpenCurly-- | {
-           | C'Pipe-- | |
+           | (:|)-- | |
            | C'CloseCurly-- | }
-           | C'Tilde-- | ~
-           | C'House-- | ⌂
+           | (:~)-- | ~
+           | (:⌂)-- | ⌂
            | C'Ç
            | C'ü
            | C'é
@@ -157,10 +156,10 @@ data CP437 = C'InvSmile-- | ☺
            | C'ÿ
            | C'Ö
            | C'Ü
-           | C'Cent-- | ¢
-           | C'Pound-- | £
-           | C'Yen-- | ¥
-           | C'Peseta-- | ₧
+           | (:¢)
+           | (:£)
+           | (:¥)
+           | (:₧)
            | C'ƒ
            | C'á
            | C'í
@@ -168,64 +167,64 @@ data CP437 = C'InvSmile-- | ☺
            | C'ú
            | C'ñ
            | C'Ñ
-           | C'Feminine-- | ª
-           | C'Masculine-- | º
-           | C'InvQuestion-- | ¿
-           | C'InvNot-- | ⌐
-           | C'Not-- | ¬
-           | C'Half-- | ½
-           | C'Fourth-- | ¼
-           | C'InvExc-- | ¡
-           | C'LeftAngle2-- | «
-           | C'RightAngle2-- | »
-           | C'FadeLeast-- | ░
-           | C'FadeLittle-- | ▒
-           | C'Fade-- | ▓
-           | C'Box1010-- | │
-           | C'Box1011-- | ┤
-           | C'Box1012-- | ╡
-           | C'Box2021-- | ╢
-           | C'Box0021-- | ╖
-           | C'Box0012-- | ╕
-           | C'Box2022-- | ╣
-           | C'Box2020-- | ║
-           | C'Box0022-- | ╗
-           | C'Box2002-- | ╝
-           | C'Box2001-- | ╜
-           | C'Box1002-- | ╛
-           | C'Box0011-- | ┐
-           | C'Box1100-- | └
-           | C'Box1101-- | ┴
-           | C'Box0111-- | ┬
-           | C'Box1110-- | ├
-           | C'Box0101-- | ─
-           | C'Box1111-- | ┼
-           | C'Box1210-- | ╞
-           | C'Box2120-- | ╟
-           | C'Box2200-- | ╚
-           | C'Box0220-- | ╔
-           | C'Box2202-- | ╩
-           | C'Box0222-- | ╦
-           | C'Box2220-- | ╠
-           | C'Box0202-- | ═
-           | C'Box2222-- | ╬
-           | C'Box1202-- | ╧
-           | C'Box2101-- | ╨
-           | C'Box0212-- | ╤
-           | C'Box0121-- | ╥
-           | C'Box2100-- | ╙
-           | C'Box1200-- | ╘
-           | C'Box0210-- | ╒
-           | C'Box0120-- | ╓
-           | C'Box2121-- | ╫
-           | C'Box1212-- | ╪
-           | C'Box1001-- | ┘
-           | C'Box0110-- | ┌
-           | C'Full-- | █
-           | C'SolidDown-- | ▄
-           | C'SolidRight-- | ▌
-           | C'SolidLeft-- | ▐
-           | C'SolidTop-- | ▀
+           | C'Feminine
+           | C'Masculine
+           | (:¿)
+           | (:⌐)
+           | (:¬)
+           | C'Half
+           | C'Fourth
+           | (:¡)
+           | C'LeftAngle2
+           | C'RightAngle2
+           | (:░)
+           | (:▒)
+           | (:▓)
+           | (:│)
+           | (:┤)
+           | (:╡)
+           | (:╢)
+           | (:╖)
+           | (:╕)
+           | (:╣)
+           | (:║)
+           | (:╗)
+           | (:╝)
+           | (:╜)
+           | (:╛)
+           | (:┐)
+           | (:└)
+           | (:┴)
+           | (:┬)
+           | (:├)
+           | (:─)
+           | (:┼)
+           | (:╞)
+           | (:╟)
+           | (:╚)
+           | (:╔)
+           | (:╩)
+           | (:╦)
+           | (:╠)
+           | (:═)
+           | (:╬)
+           | (:╧)
+           | (:╨)
+           | (:╤)
+           | (:╥)
+           | (:╙)
+           | (:╘)
+           | (:╒)
+           | (:╓)
+           | (:╫)
+           | (:╪)
+           | (:┘)
+           | (:┌)
+           | (:█)
+           | (:▄)
+           | (:▌)
+           | (:▐)
+           | (:▀)
            | C'α
            | C'β
            | C'Γ
@@ -238,329 +237,329 @@ data CP437 = C'InvSmile-- | ☺
            | C'Θ
            | C'Ω
            | C'δ
-           | C'Inf-- | ∞
+           | (:∞)
            | C'φ
            | C'ϵ
-           | C'Intersect-- | ∩
-           | C'TripleBar-- | ≡
-           | C'PlusMinus-- | ±
-           | C'GreaterEq-- | ≥
-           | C'LessEq-- | ≤
-           | C'IntegralTop-- | ⌠
-           | C'IntegralBottom-- | ⌡
-           | C'Obelus-- | ÷
-           | C'ApproxEq-- | ≈
-           | C'Degree-- | °
-           | C'SmallSquare-- | ▪
-           | C'Dot-- | ·
-           | C'Check-- | √
-           | C'Nth-- | ⁿ
-           | C'Squared-- | ²
-           | C'LargeSquare-- | ■
+           | (:∩)
+           | (:≡)
+           | (:±)
+           | (:≥)
+           | (:≤)
+           | (:⌠)
+           | (:⌡)
+           | (:÷)
+           | (:≈)
+           | (:°)
+           | (:▪)
+           | (:·)
+           | (:√)
+           | C'Nth
+           | C'Squared
+           | (:■)
 
 instance Code CP437 where
-    getIndex C'InvSmile       = 1
-    getIndex C'Smile          = 2
-    getIndex C'Heart          = 3
-    getIndex C'Diamond        = 4
-    getIndex C'Club           = 5
-    getIndex C'Spade          = 6
-    getIndex C'Disc           = 7
-    getIndex C'InvDisc        = 8
-    getIndex C'Circle         = 9
-    getIndex C'InvCircle      = 10
-    getIndex C'Mars           = 11
-    getIndex C'Venus          = 12
-    getIndex C'Note           = 13
-    getIndex C'DoubleNote     = 14
-    getIndex C'Sun            = 15
-    getIndex C'TriRight       = 16
-    getIndex C'TriLeft        = 17
-    getIndex C'Vertical       = 18
-    getIndex C'DoubleExc      = 19
-    getIndex C'Pilcrow        = 20
-    getIndex C'Section        = 21
-    getIndex C'LowLine        = 22
-    getIndex C'Vertical2      = 23
-    getIndex C'Up             = 24
-    getIndex C'Down           = 25
-    getIndex C'Right          = 26
-    getIndex C'Left           = 27
-    getIndex C'RightAngle     = 28
-    getIndex C'Horizontal     = 29
-    getIndex C'TriUp          = 30
-    getIndex C'TriDown        = 31
-    getIndex C'Space          = 32
-    getIndex C'Exclamation    = 33
-    getIndex C'DoubleQuote    = 34
-    getIndex C'Hashtag        = 35
-    getIndex C'Dollar         = 36
-    getIndex C'Percent        = 37
-    getIndex C'And            = 38
-    getIndex C'Quote          = 39
-    getIndex C'OpenParen      = 40
-    getIndex C'CloseParen     = 41
-    getIndex C'Asterisk       = 42
-    getIndex C'Plus           = 43
-    getIndex C'Comma          = 44
-    getIndex C'Minus          = 45
-    getIndex C'Period         = 46
-    getIndex C'Slash          = 47
-    getIndex C'0              = 48
-    getIndex C'1              = 49
-    getIndex C'2              = 50
-    getIndex C'3              = 51
-    getIndex C'4              = 52
-    getIndex C'5              = 53
-    getIndex C'6              = 54
-    getIndex C'7              = 55
-    getIndex C'8              = 56
-    getIndex C'9              = 57
-    getIndex C'Colon          = 58
-    getIndex C'Semi           = 59
-    getIndex C'Less           = 60
-    getIndex C'Eq             = 61
-    getIndex C'Greater        = 62
-    getIndex C'Question       = 63
-    getIndex C'Rogue          = 64
-    getIndex C'A              = 65
-    getIndex C'B              = 66
-    getIndex C'C              = 67
-    getIndex C'D              = 68
-    getIndex C'E              = 69
-    getIndex C'F              = 70
-    getIndex C'G              = 71
-    getIndex C'H              = 72
-    getIndex C'I              = 73
-    getIndex C'J              = 74
-    getIndex C'K              = 75
-    getIndex C'L              = 76
-    getIndex C'M              = 77
-    getIndex C'N              = 78
-    getIndex C'O              = 79
-    getIndex C'P              = 80
-    getIndex C'Q              = 81
-    getIndex C'R              = 82
-    getIndex C'S              = 83
-    getIndex C'T              = 84
-    getIndex C'U              = 85
-    getIndex C'V              = 86
-    getIndex C'W              = 87
-    getIndex C'X              = 88
-    getIndex C'Y              = 89
-    getIndex C'Z              = 90
-    getIndex C'OpenSquare     = 91
-    getIndex C'Backslash      = 92
-    getIndex C'CloseSquare    = 93
-    getIndex C'Caret          = 94
-    getIndex C'_              = 95
-    getIndex C'Backquote      = 96
-    getIndex C'a              = 97
-    getIndex C'b              = 98
-    getIndex C'c              = 99
-    getIndex C'd              = 100
-    getIndex C'e              = 101
-    getIndex C'f              = 102
-    getIndex C'g              = 103
-    getIndex C'h              = 104
-    getIndex C'i              = 105
-    getIndex C'j              = 106
-    getIndex C'k              = 107
-    getIndex C'l              = 108
-    getIndex C'm              = 109
-    getIndex C'n              = 110
-    getIndex C'o              = 111
-    getIndex C'p              = 112
-    getIndex C'q              = 113
-    getIndex C'r              = 114
-    getIndex C's              = 115
-    getIndex C't              = 116
-    getIndex C'u              = 117
-    getIndex C'v              = 118
-    getIndex C'w              = 119
-    getIndex C'x              = 120
-    getIndex C'y              = 121
-    getIndex C'z              = 122
-    getIndex C'OpenCurly      = 123
-    getIndex C'Pipe           = 124
-    getIndex C'CloseCurly     = 125
-    getIndex C'Tilde          = 126
-    getIndex C'House          = 127
-    getIndex C'Ç              = 128
-    getIndex C'ü              = 129
-    getIndex C'é              = 130
-    getIndex C'â              = 131
-    getIndex C'ä              = 132
-    getIndex C'à              = 133
-    getIndex C'å              = 134
-    getIndex C'ç              = 135
-    getIndex C'ê              = 136
-    getIndex C'ë              = 137
-    getIndex C'è              = 138
-    getIndex C'ï              = 139
-    getIndex C'î              = 140
-    getIndex C'ì              = 141
-    getIndex C'Ä              = 142
-    getIndex C'Å              = 143
-    getIndex C'É              = 144
-    getIndex C'æ              = 145
-    getIndex C'Æ              = 146
-    getIndex C'ô              = 147
-    getIndex C'ö              = 148
-    getIndex C'ò              = 149
-    getIndex C'û              = 150
-    getIndex C'ù              = 151
-    getIndex C'ÿ              = 152
-    getIndex C'Ö              = 153
-    getIndex C'Ü              = 154
-    getIndex C'Cent           = 155
-    getIndex C'Pound          = 156
-    getIndex C'Yen            = 157
-    getIndex C'Peseta         = 158
-    getIndex C'ƒ              = 159
-    getIndex C'á              = 160
-    getIndex C'í              = 161
-    getIndex C'ó              = 162
-    getIndex C'ú              = 163
-    getIndex C'ñ              = 164
-    getIndex C'Ñ              = 165
-    getIndex C'Feminine       = 166
-    getIndex C'Masculine      = 167
-    getIndex C'InvQuestion    = 168
-    getIndex C'InvNot         = 169
-    getIndex C'Not            = 170
-    getIndex C'Half           = 171
-    getIndex C'Fourth         = 172
-    getIndex C'InvExc         = 173
-    getIndex C'LeftAngle2     = 174
-    getIndex C'RightAngle2    = 175
-    getIndex C'FadeLeast      = 176
-    getIndex C'FadeLittle     = 177
-    getIndex C'Fade           = 178
-    getIndex C'Box1010        = 179
-    getIndex C'Box1011        = 180
-    getIndex C'Box1012        = 181
-    getIndex C'Box2021        = 182
-    getIndex C'Box0021        = 183
-    getIndex C'Box0012        = 184
-    getIndex C'Box2022        = 185
-    getIndex C'Box2020        = 186
-    getIndex C'Box0022        = 187
-    getIndex C'Box2002        = 188
-    getIndex C'Box2001        = 189
-    getIndex C'Box1002        = 190
-    getIndex C'Box0011        = 191
-    getIndex C'Box1100        = 192
-    getIndex C'Box1101        = 193
-    getIndex C'Box0111        = 194
-    getIndex C'Box1110        = 195
-    getIndex C'Box0101        = 196
-    getIndex C'Box1111        = 197
-    getIndex C'Box1210        = 198
-    getIndex C'Box2120        = 199
-    getIndex C'Box2200        = 200
-    getIndex C'Box0220        = 201
-    getIndex C'Box2202        = 202
-    getIndex C'Box0222        = 203
-    getIndex C'Box2220        = 204
-    getIndex C'Box0202        = 205
-    getIndex C'Box2222        = 206
-    getIndex C'Box1202        = 207
-    getIndex C'Box2101        = 208
-    getIndex C'Box0212        = 209
-    getIndex C'Box0121        = 210
-    getIndex C'Box2100        = 211
-    getIndex C'Box1200        = 212
-    getIndex C'Box0210        = 213
-    getIndex C'Box0120        = 214
-    getIndex C'Box2121        = 215
-    getIndex C'Box1212        = 216
-    getIndex C'Box1001        = 217
-    getIndex C'Box0110        = 218
-    getIndex C'Full           = 219
-    getIndex C'SolidDown      = 220
-    getIndex C'SolidRight     = 221
-    getIndex C'SolidLeft      = 222
-    getIndex C'SolidTop       = 223
-    getIndex C'α              = 224
-    getIndex C'β              = 225
-    getIndex C'Γ              = 226
-    getIndex C'π              = 227
-    getIndex C'Σ              = 228
-    getIndex C'σ              = 229
-    getIndex C'μ              = 230
-    getIndex C'τ              = 231
-    getIndex C'Φ              = 232
-    getIndex C'Θ              = 233
-    getIndex C'Ω              = 234
-    getIndex C'δ              = 235
-    getIndex C'Inf            = 236
-    getIndex C'φ              = 237
-    getIndex C'ϵ              = 238
-    getIndex C'Intersect      = 239
-    getIndex C'TripleBar      = 240
-    getIndex C'PlusMinus      = 241
-    getIndex C'GreaterEq      = 242
-    getIndex C'LessEq         = 243
-    getIndex C'IntegralTop    = 244
-    getIndex C'IntegralBottom = 245
-    getIndex C'Obelus         = 246
-    getIndex C'ApproxEq       = 247
-    getIndex C'Degree         = 248
-    getIndex C'SmallSquare    = 249
-    getIndex C'Dot            = 250
-    getIndex C'Check          = 251
-    getIndex C'Nth            = 252
-    getIndex C'Squared        = 253
-    getIndex C'LargeSquare    = 254
+    getIndex (:☺)          = 1
+    getIndex (:☻)          = 2
+    getIndex (:♥)          = 3
+    getIndex (:♦)          = 4
+    getIndex (:♣)          = 5
+    getIndex (:♠)          = 6
+    getIndex (:●)          = 7
+    getIndex (:◘)          = 8
+    getIndex (:◦)          = 9
+    getIndex (:◙)          = 10
+    getIndex (:♂)          = 11
+    getIndex (:♀)          = 12
+    getIndex (:♪)          = 13
+    getIndex (:♫)          = 14
+    getIndex (:☼)          = 15
+    getIndex (:►)          = 16
+    getIndex (:◄)          = 17
+    getIndex (:↕)          = 18
+    getIndex (:‼)          = 19
+    getIndex (:¶)          = 20
+    getIndex (:§)          = 21
+    getIndex (:‗)          = 22
+    getIndex (:↨)          = 23
+    getIndex (:↑)          = 24
+    getIndex (:↓)          = 25
+    getIndex (:→)          = 26
+    getIndex (:←)          = 27
+    getIndex (:∟)          = 28
+    getIndex (:↔)          = 29
+    getIndex (:▲)          = 30
+    getIndex (:▼)          = 31
+    getIndex C'Space      =  32
+    getIndex (:!)         =  33
+    getIndex C'DoubleQuote=  34
+    getIndex (:#)         =  35
+    getIndex (:$)         =  36
+    getIndex (:%)         =  37
+    getIndex (:&)         =  38
+    getIndex C'SingleQuote=  39
+    getIndex C'OpenParen  =  40
+    getIndex C'CloseParen =  41
+    getIndex (:*)         =  42
+    getIndex (:+)         =  43
+    getIndex C'Comma      =  44
+    getIndex (:-)         =  45
+    getIndex (:.)         =  46
+    getIndex (:/)         =  47
+    getIndex C'0          =  48
+    getIndex C'1          =  49
+    getIndex C'2          =  50
+    getIndex C'3          =  51
+    getIndex C'4          =  52
+    getIndex C'5          =  53
+    getIndex C'6          =  54
+    getIndex C'7          =  55
+    getIndex C'8          =  56
+    getIndex C'9          =  57
+    getIndex C'Colon      =  58
+    getIndex C'Semi       =  59
+    getIndex (:<)         =  60
+    getIndex (:=)         =  61
+    getIndex (:>)         =  62
+    getIndex (:?)         =  63
+    getIndex (:@)         =  64
+    getIndex C'A          =  65
+    getIndex C'B          =  66
+    getIndex C'C          =  67
+    getIndex C'D          =  68
+    getIndex C'E          =  69
+    getIndex C'F          =  70
+    getIndex C'G          =  71
+    getIndex C'H          =  72
+    getIndex C'I          =  73
+    getIndex C'J          =  74
+    getIndex C'K          =  75
+    getIndex C'L          =  76
+    getIndex C'M          =  77
+    getIndex C'N          =  78
+    getIndex C'O          =  79
+    getIndex C'P          =  80
+    getIndex C'Q          =  81
+    getIndex C'R          =  82
+    getIndex C'S          =  83
+    getIndex C'T          =  84
+    getIndex C'U          =  85
+    getIndex C'V          =  86
+    getIndex C'W          =  87
+    getIndex C'X          =  88
+    getIndex C'Y          =  89
+    getIndex C'Z          =  90
+    getIndex C'OpenSquare =  91
+    getIndex (:\)         =  92
+    getIndex C'CloseSquare=  93
+    getIndex (:^)         =  94
+    getIndex C'_          =  95
+    getIndex C'Backquote  =  96
+    getIndex C'a          =  97
+    getIndex C'b          =  98
+    getIndex C'c          =  99
+    getIndex C'd          =  100
+    getIndex C'e          =  101
+    getIndex C'f          =  102
+    getIndex C'g          =  103
+    getIndex C'h          =  104
+    getIndex C'i          =  105
+    getIndex C'j          =  106
+    getIndex C'k          =  107
+    getIndex C'l          =  108
+    getIndex C'm          =  109
+    getIndex C'n          =  110
+    getIndex C'o          =  111
+    getIndex C'p          =  112
+    getIndex C'q          =  113
+    getIndex C'r          =  114
+    getIndex C's          =  115
+    getIndex C't          =  116
+    getIndex C'u          =  117
+    getIndex C'v          =  118
+    getIndex C'w          =  119
+    getIndex C'x          =  120
+    getIndex C'y          =  121
+    getIndex C'z          =  122
+    getIndex C'OpenCurly  =  123
+    getIndex (:|)         =  124
+    getIndex C'CloseCurly =  125
+    getIndex (:~)         =  126
+    getIndex (:⌂)         =  127
+    getIndex C'Ç          =  128
+    getIndex C'ü          =  129
+    getIndex C'é          =  130
+    getIndex C'â          =  131
+    getIndex C'ä          =  132
+    getIndex C'à          =  133
+    getIndex C'å          =  134
+    getIndex C'ç          =  135
+    getIndex C'ê          =  136
+    getIndex C'ë          =  137
+    getIndex C'è          =  138
+    getIndex C'ï          =  139
+    getIndex C'î          =  140
+    getIndex C'ì          =  141
+    getIndex C'Ä          =  142
+    getIndex C'Å          =  143
+    getIndex C'É          =  144
+    getIndex C'æ          =  145
+    getIndex C'Æ          =  146
+    getIndex C'ô          =  147
+    getIndex C'ö          =  148
+    getIndex C'ò          =  149
+    getIndex C'û          =  150
+    getIndex C'ù          =  151
+    getIndex C'ÿ          =  152
+    getIndex C'Ö          =  153
+    getIndex C'Ü          =  154
+    getIndex (:¢)         =  155
+    getIndex (:£)         =  156
+    getIndex (:¥)         =  157
+    getIndex (:₧)         =  158
+    getIndex C'ƒ          =  159
+    getIndex C'á          =  160
+    getIndex C'í          =  161
+    getIndex C'ó          =  162
+    getIndex C'ú          =  163
+    getIndex C'ñ          =  164
+    getIndex C'Ñ          =  165
+    getIndex C'Feminine   =  166
+    getIndex C'Masculine  =  167
+    getIndex (:¿)         =  168
+    getIndex (:⌐)         =  169
+    getIndex (:¬)         =  170
+    getIndex C'Half       =  171
+    getIndex C'Fourth     =  172
+    getIndex (:¡)         =  173
+    getIndex C'LeftAngle2 =  174
+    getIndex C'RightAngle2=  175
+    getIndex (:░)         =  176
+    getIndex (:▒)         =  177
+    getIndex (:▓)         =  178
+    getIndex (:│)         =  179
+    getIndex (:┤)         =  180
+    getIndex (:╡)         =  181
+    getIndex (:╢)         =  182
+    getIndex (:╖)         =  183
+    getIndex (:╕)         =  184
+    getIndex (:╣)         =  185
+    getIndex (:║)         =  186
+    getIndex (:╗)         =  187
+    getIndex (:╝)         =  188
+    getIndex (:╜)         =  189
+    getIndex (:╛)         =  190
+    getIndex (:┐)         =  191
+    getIndex (:└)         =  192
+    getIndex (:┴)         =  193
+    getIndex (:┬)         =  194
+    getIndex (:├)         =  195
+    getIndex (:─)         =  196
+    getIndex (:┼)         =  197
+    getIndex (:╞)         =  198
+    getIndex (:╟)         =  199
+    getIndex (:╚)         =  200
+    getIndex (:╔)         =  201
+    getIndex (:╩)         =  202
+    getIndex (:╦)         =  203
+    getIndex (:╠)         =  204
+    getIndex (:═)         =  205
+    getIndex (:╬)         =  206
+    getIndex (:╧)         =  207
+    getIndex (:╨)         =  208
+    getIndex (:╤)         =  209
+    getIndex (:╥)         =  210
+    getIndex (:╙)         =  211
+    getIndex (:╘)         =  212
+    getIndex (:╒)         =  213
+    getIndex (:╓)         =  214
+    getIndex (:╫)         =  215
+    getIndex (:╪)         =  216
+    getIndex (:┘)         =  217
+    getIndex (:┌)         =  218
+    getIndex (:█)         =  219
+    getIndex (:▄)         =  220
+    getIndex (:▌)         =  221
+    getIndex (:▐)         =  222
+    getIndex (:▀)         =  223
+    getIndex C'α          =  224
+    getIndex C'β          =  225
+    getIndex C'Γ          =  226
+    getIndex C'π          =  227
+    getIndex C'Σ          =  228
+    getIndex C'σ          =  229
+    getIndex C'μ          =  230
+    getIndex C'τ          =  231
+    getIndex C'Φ          =  232
+    getIndex C'Θ          =  233
+    getIndex C'Ω          =  234
+    getIndex C'δ          =  235
+    getIndex (:∞)         =  236
+    getIndex C'φ          =  237
+    getIndex C'ϵ          =  238
+    getIndex (:∩)         =  239
+    getIndex (:≡)         =  240
+    getIndex (:±)         =  241
+    getIndex (:≥)         =  242
+    getIndex (:≤)         =  243
+    getIndex (:⌠)         =  244
+    getIndex (:⌡)         =  245
+    getIndex (:÷)         =  246
+    getIndex (:≈)         =  247
+    getIndex (:°)         =  248
+    getIndex (:▪)         =  249
+    getIndex (:·)         =  250
+    getIndex (:√)         =  251
+    getIndex C'Nth        =  252
+    getIndex C'Squared    =  253
+    getIndex (:■)         =  254
 
-    fromChar '☺' = C'InvSmile
-    fromChar '☻' = C'Smile
-    fromChar '♥' = C'Heart
-    fromChar '♦' = C'Diamond
-    fromChar '♣' = C'Club
-    fromChar '♠' = C'Spade
-    fromChar '●' = C'Disc
-    fromChar '◘' = C'InvDisc
-    fromChar '◦' = C'Circle
-    fromChar '◙' = C'InvCircle
-    fromChar '♂' = C'Mars
-    fromChar '♀' = C'Venus
-    fromChar '♪' = C'Note
-    fromChar '♫' = C'DoubleNote
-    fromChar '☼' = C'Sun
-    fromChar '►' = C'TriRight
-    fromChar '◄' = C'TriLeft
-    fromChar '↕' = C'Vertical
-    fromChar '‼' = C'DoubleExc
-    fromChar '¶' = C'Pilcrow
-    fromChar '§' = C'Section
-    fromChar '‗' = C'LowLine
-    fromChar '↨' = C'Vertical2
-    fromChar '↑' = C'Up
-    fromChar '↓' = C'Down
-    fromChar '→' = C'Right
-    fromChar '←' = C'Left
-    fromChar '∟' = C'RightAngle
-    fromChar '↔' = C'Horizontal
-    fromChar '▲' = C'TriUp
-    fromChar '▼' = C'TriDown
+    fromChar '☺' = (:☺)
+    fromChar '☻' = (:☻)
+    fromChar '♥' = (:♥)
+    fromChar '♦' = (:♦)
+    fromChar '♣' = (:♣)
+    fromChar '♠' = (:♠)
+    fromChar '●' = (:●)
+    fromChar '◘' = (:◘)
+    fromChar '◦' = (:◦)
+    fromChar '◙' = (:◙)
+    fromChar '♂' = (:♂)
+    fromChar '♀' = (:♀)
+    fromChar '♪' = (:♪)
+    fromChar '♫' = (:♫)
+    fromChar '☼' = (:☼)
+    fromChar '►' = (:►)
+    fromChar '◄' = (:◄)
+    fromChar '↕' = (:↕)
+    fromChar '‼' = (:‼)
+    fromChar '¶' = (:¶)
+    fromChar '§' = (:§)
+    fromChar '‗' = (:‗)
+    fromChar '↨' = (:↨)
+    fromChar '↑' = (:↑)
+    fromChar '↓' = (:↓)
+    fromChar '→' = (:→)
+    fromChar '←' = (:←)
+    fromChar '∟' = (:∟)
+    fromChar '↔' = (:↔)
+    fromChar '▲' = (:▲)
+    fromChar '▼' = (:▼)
     fromChar ' ' = C'Space
-    fromChar '!' = C'Exclamation
+    fromChar '!' = (:!)
     fromChar '"' = C'DoubleQuote
-    fromChar '#' = C'Hashtag
-    fromChar '$' = C'Dollar
-    fromChar '%' = C'Percent
-    fromChar '&' = C'And
-    fromChar '\''= C'Quote
+    fromChar '#' = (:#)
+    fromChar '$' = (:$)
+    fromChar '%' = (:%)
+    fromChar '&' = (:&)
+    fromChar '\''= C'SingleQuote
     fromChar '(' = C'OpenParen
     fromChar ')' = C'CloseParen
-    fromChar '*' = C'Asterisk
-    fromChar '+' = C'Plus
+    fromChar '*' = (:*)
+    fromChar '+' = (:+)
     fromChar ',' = C'Comma
-    fromChar '-' = C'Minus
-    fromChar '.' = C'Period
-    fromChar '/' = C'Slash
+    fromChar '-' = (:-)
+    fromChar '.' = (:.)
+    fromChar '/' = (:/)
     fromChar '0' = C'0
     fromChar '1' = C'1
     fromChar '2' = C'2
@@ -573,11 +572,11 @@ instance Code CP437 where
     fromChar '9' = C'9
     fromChar ':' = C'Colon
     fromChar ';' = C'Semi
-    fromChar '<' = C'Less
-    fromChar '=' = C'Eq
-    fromChar '>' = C'Greater
-    fromChar '?' = C'Question
-    fromChar '@' = C'Rogue
+    fromChar '<' = (:<)
+    fromChar '=' = (:=)
+    fromChar '>' = (:>)
+    fromChar '?' = (:?)
+    fromChar '@' = (:@)
     fromChar 'A' = C'A
     fromChar 'B' = C'B
     fromChar 'C' = C'C
@@ -605,9 +604,9 @@ instance Code CP437 where
     fromChar 'Y' = C'Y
     fromChar 'Z' = C'Z
     fromChar '[' = C'OpenSquare
-    fromChar '\\'= C'Backslash
+    fromChar '\\'= (:\)
     fromChar ']' = C'CloseSquare
-    fromChar '^' = C'Caret
+    fromChar '^' = (:^)
     fromChar '_' = C'_
     fromChar '`' = C'Backquote
     fromChar 'a' = C'a
@@ -637,10 +636,10 @@ instance Code CP437 where
     fromChar 'y' = C'y
     fromChar 'z' = C'z
     fromChar '{' = C'OpenCurly
-    fromChar '|' = C'Pipe
+    fromChar '|' = (:|)
     fromChar '}' = C'CloseCurly
-    fromChar '~' = C'Tilde
-    fromChar '⌂' = C'House
+    fromChar '~' = (:~)
+    fromChar '⌂' = (:⌂)
     fromChar 'Ç' = C'Ç
     fromChar 'ü' = C'ü
     fromChar 'é' = C'é
@@ -668,10 +667,10 @@ instance Code CP437 where
     fromChar 'ÿ' = C'ÿ
     fromChar 'Ö' = C'Ö
     fromChar 'Ü' = C'Ü
-    fromChar '¢' = C'Cent
-    fromChar '£' = C'Pound
-    fromChar '¥' = C'Yen
-    fromChar '₧' = C'Peseta
+    fromChar '¢' = (:¢)
+    fromChar '£' = (:£)
+    fromChar '¥' = (:¥)
+    fromChar '₧' = (:₧)
     fromChar 'ƒ' = C'ƒ
     fromChar 'á' = C'á
     fromChar 'í' = C'í
@@ -681,62 +680,62 @@ instance Code CP437 where
     fromChar 'Ñ' = C'Ñ
     fromChar 'ª' = C'Feminine
     fromChar 'º' = C'Masculine
-    fromChar '¿' = C'InvQuestion
-    fromChar '⌐' = C'InvNot
-    fromChar '¬' = C'Not
+    fromChar '¿' = (:¿)
+    fromChar '⌐' = (:⌐)
+    fromChar '¬' = (:¬)
     fromChar '½' = C'Half
     fromChar '¼' = C'Fourth
-    fromChar '¡' = C'InvExc
+    fromChar '¡' = (:¡)
     fromChar '«' = C'LeftAngle2
     fromChar '»' = C'RightAngle2
-    fromChar '░' = C'FadeLeast
-    fromChar '▒' = C'FadeLittle
-    fromChar '▓' = C'Fade
-    fromChar '│' = C'Box1010
-    fromChar '┤' = C'Box1011
-    fromChar '╡' = C'Box1012
-    fromChar '╢' = C'Box2021
-    fromChar '╖' = C'Box0021
-    fromChar '╕' = C'Box0012
-    fromChar '╣' = C'Box2022
-    fromChar '║' = C'Box2020
-    fromChar '╗' = C'Box0022
-    fromChar '╝' = C'Box2002
-    fromChar '╜' = C'Box2001
-    fromChar '╛' = C'Box1002
-    fromChar '┐' = C'Box0011
-    fromChar '└' = C'Box1100
-    fromChar '┴' = C'Box1101
-    fromChar '┬' = C'Box0111
-    fromChar '├' = C'Box1110
-    fromChar '─' = C'Box0101
-    fromChar '┼' = C'Box1111
-    fromChar '╞' = C'Box1210
-    fromChar '╟' = C'Box2120
-    fromChar '╚' = C'Box2200
-    fromChar '╔' = C'Box0220
-    fromChar '╩' = C'Box2202
-    fromChar '╦' = C'Box0222
-    fromChar '╠' = C'Box2220
-    fromChar '═' = C'Box0202
-    fromChar '╬' = C'Box2222
-    fromChar '╧' = C'Box1202
-    fromChar '╨' = C'Box2101
-    fromChar '╤' = C'Box0212
-    fromChar '╥' = C'Box0121
-    fromChar '╙' = C'Box2100
-    fromChar '╘' = C'Box1200
-    fromChar '╒' = C'Box0210
-    fromChar '╓' = C'Box0120
-    fromChar '╫' = C'Box2121
-    fromChar '╪' = C'Box1212
-    fromChar '┘' = C'Box1001
-    fromChar '┌' = C'Box0110
-    fromChar '█' = C'Full
-    fromChar '▄' = C'SolidDown
-    fromChar '▌' = C'SolidRight
-    fromChar '▐' = C'SolidLeft
-    fromChar '▀' = C'SolidTop
+    fromChar '░' = (:░)
+    fromChar '▒' = (:▒)
+    fromChar '▓' = (:▓)
+    fromChar '│' = (:│)
+    fromChar '┤' = (:┤)
+    fromChar '╡' = (:╡)
+    fromChar '╢' = (:╢)
+    fromChar '╖' = (:╖)
+    fromChar '╕' = (:╕)
+    fromChar '╣' = (:╣)
+    fromChar '║' = (:║)
+    fromChar '╗' = (:╗)
+    fromChar '╝' = (:╝)
+    fromChar '╜' = (:╜)
+    fromChar '╛' = (:╛)
+    fromChar '┐' = (:┐)
+    fromChar '└' = (:└)
+    fromChar '┴' = (:┴)
+    fromChar '┬' = (:┬)
+    fromChar '├' = (:├)
+    fromChar '─' = (:─)
+    fromChar '┼' = (:┼)
+    fromChar '╞' = (:╞)
+    fromChar '╟' = (:╟)
+    fromChar '╚' = (:╚)
+    fromChar '╔' = (:╔)
+    fromChar '╩' = (:╩)
+    fromChar '╦' = (:╦)
+    fromChar '╠' = (:╠)
+    fromChar '═' = (:═)
+    fromChar '╬' = (:╬)
+    fromChar '╧' = (:╧)
+    fromChar '╨' = (:╨)
+    fromChar '╤' = (:╤)
+    fromChar '╥' = (:╥)
+    fromChar '╙' = (:╙)
+    fromChar '╘' = (:╘)
+    fromChar '╒' = (:╒)
+    fromChar '╓' = (:╓)
+    fromChar '╫' = (:╫)
+    fromChar '╪' = (:╪)
+    fromChar '┘' = (:┘)
+    fromChar '┌' = (:┌)
+    fromChar '█' = (:█)
+    fromChar '▄' = (:▄)
+    fromChar '▌' = (:▌)
+    fromChar '▐' = (:▐)
+    fromChar '▀' = (:▀)
     fromChar 'α' = C'α
     fromChar 'β' = C'β
     fromChar 'Γ' = C'Γ
@@ -749,22 +748,22 @@ instance Code CP437 where
     fromChar 'Θ' = C'Θ
     fromChar 'Ω' = C'Ω
     fromChar 'δ' = C'δ
-    fromChar '∞' = C'Inf
+    fromChar '∞' = (:∞)
     fromChar 'φ' = C'φ
     fromChar 'ϵ' = C'ϵ
-    fromChar '∩' = C'Intersect
-    fromChar '≡' = C'TripleBar
-    fromChar '±' = C'PlusMinus
-    fromChar '≥' = C'GreaterEq
-    fromChar '≤' = C'LessEq
-    fromChar '⌠' = C'IntegralTop
-    fromChar '⌡' = C'IntegralBottom
-    fromChar '÷' = C'Obelus
-    fromChar '≈' = C'ApproxEq
-    fromChar '°' = C'Degree
-    fromChar '▪' = C'SmallSquare
-    fromChar '·' = C'Dot
-    fromChar '√' = C'Check
+    fromChar '∩' = (:∩)
+    fromChar '≡' = (:≡)
+    fromChar '±' = (:±)
+    fromChar '≥' = (:≥)
+    fromChar '≤' = (:≤)
+    fromChar '⌠' = (:⌠)
+    fromChar '⌡' = (:⌡)
+    fromChar '÷' = (:÷)
+    fromChar '≈' = (:≈)
+    fromChar '°' = (:°)
+    fromChar '▪' = (:▪)
+    fromChar '·' = (:·)
+    fromChar '√' = (:√)
     fromChar 'ⁿ' = C'Nth
     fromChar '²' = C'Squared
-    fromChar '■' = C'LargeSquare
+    fromChar '■' = (:■)

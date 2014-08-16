@@ -21,7 +21,7 @@ instance Drawable GameState where
         let ts = Tileset 16 16 16 16
         let ren = Renderer tex ts
         let tr :: TR XY (Tile CP437)
-            tr = empty <+ ((0,0), Tile C'A black red)
+            tr = empty <+ ((0,0), Tile (:☺) black red)
                        <+ ((0,1), Tile C'B red white)
         render ren tr
 
