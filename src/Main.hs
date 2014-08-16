@@ -25,10 +25,13 @@ instance Drawable GameState where
                        <+ ((0,1), Tile C'B red white)
         render ren tr
 
-instance Game GameState b where
-    runFrame g (ctrl, a, w, rng) = do
-        r <- randomR rng (0, 10)
-        return g
+instance RandomGen rng => Game GameState (Controls a, Assets, Window) rng where
+    runFrame g _ rng =
+        runRand (thing g) rng
+        where thing :: (rng' ~ rng) => GameState -> Rand rng' GameState
+              thing gs = do
+                  _ :: Int <- getRandomR (0, 10)
+                  return gs
 
 
 mainLoop :: IO ()
@@ -39,8 +42,8 @@ mainLoop = do
     let assets = undefined :: Assets
     let state = GameState
     rng <- getStdGen
-    gs <- mkUpdater state (controls, assets, win, rng)
-    loop controls win gs tex
+    gs <- mkUpdater state (controls, assets, win) rng
+    loop controls win gs tex rng
 
 main :: IO ()
 main = do
