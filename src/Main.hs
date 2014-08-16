@@ -11,7 +11,7 @@ import Antiqua.Graphics.TileRenderer
 import Antiqua.Graphics.Tile
 import Antiqua.Data.CP437
 import Antiqua.Common
-
+import Antiqua.Graphics.Rect()
 import Control.Monad.Random
 
 data GameState = GameState
@@ -31,7 +31,7 @@ instance RandomGen rng => Game GameState (Controls a, Assets, Window) rng where
         where thing :: (rng' ~ rng) => GameState -> Rand rng' GameState
               thing gs = do
                   _ :: Int <- getRandomR (0, 10)
-                  return gs
+                  return $ gs
 
 
 mainLoop :: IO ()
@@ -47,7 +47,7 @@ mainLoop = do
 
 main :: IO ()
 main = do
-    runAudio $  mainLoop
+    runAudio mainLoop
 
 
 

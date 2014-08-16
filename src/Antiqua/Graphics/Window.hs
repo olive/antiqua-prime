@@ -11,7 +11,6 @@ import Antiqua.Common
 import Graphics.Rendering.OpenGL.Raw
 import Data.Bits ( (.|.) )
 import System.Exit ( exitWith, ExitCode(..) )
-import Control.Monad ( forever )
 
 initGL :: GLFW.Window -> IO ()
 initGL win = do
@@ -82,7 +81,6 @@ getKey (Window win) key = GLFW.getKey win key
 
 useWindow :: Window -> Texture -> IO () -> IO ()
 useWindow (Window win) text action = do
-    forever $ do
-        GLFW.pollEvents
-        drawScene text action
-        GLFW.swapBuffers win
+    GLFW.pollEvents
+    drawScene text action
+    GLFW.swapBuffers win
