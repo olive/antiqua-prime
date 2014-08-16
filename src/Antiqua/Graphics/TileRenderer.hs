@@ -38,17 +38,17 @@ withMove off tr f =  move (neg off) $ move off tr <+< f
 (<++) :: (Foldable f, Ord c) => TR c t -> f (c, t) -> TR c t
 tr <++ fs = foldl (<+) tr fs
 
-(|>) :: Ord c => TR c (Tile c) -> (c, (Tile c)) -> TR c (Tile c)
+(|>) :: Ord c => TR c (Tile t) -> (c, (Tile t)) -> TR c (Tile t)
 tr |> (p, (Tile t _ fg)) =
     tr $> (p, (\(Tile _ bg _) -> Tile t bg fg))
 
-(||>) :: (Foldable f, Ord c) => TR c (Tile c) -> f (c, (Tile c)) -> TR c (Tile c)
+(||>) :: (Foldable f, Ord c) => TR c (Tile t) -> f (c, (Tile t)) -> TR c (Tile t)
 tr ||> fs = foldl (|>) tr fs
 
-(#>) :: Ord c => TR c (Tile c) -> (c, Animation c) -> TR c (Tile c)
-tr #> (p, anim) = tr <+ (p, getFrame anim)
+(<#) :: Ord c => TR c (Tile t) -> (c, Animation t) -> TR c (Tile t)
+tr <# (p, anim) = tr <+ (p, getFrame anim)
 
-(#|>) :: Ord c => TR c (Tile c) -> (c, Animation c) -> TR c (Tile c)
+(#|>) :: Ord c => TR c (Tile t) -> (c, Animation t) -> TR c (Tile t)
 tr #|> (p, anim) = tr |> (p, getFrame anim)
 
 (<+<) :: TR c t -> (TR c t -> TR c t) -> TR c t
