@@ -30,11 +30,10 @@ instance Drawable GameState where
         render ren tr
 
 instance (C.Control a, RandomGen rng) => Game GameState (C.Controls a, Assets, Window) rng where
-    runFrame g@(GameState a b which) (ctrl, _, _) rng = do
-
+    runFrame g@(GameState a b _) (ctrl, _, _) rng = do
         runRand (thing g) rng
         where thing :: (rng' ~ rng) => GameState -> Rand rng' GameState
-              thing gs = do
+              thing _ = do
                   let isPressed = C.isPressed $ C.firstGet ctrl
                   _ :: Int <- getRandomR (0, 10)
                   return $ (GameState (update a) (update b) isPressed)
@@ -42,7 +41,7 @@ instance (C.Control a, RandomGen rng) => Game GameState (C.Controls a, Assets, W
 
 mainLoop :: IO ()
 mainLoop = do
-    win <- createWindow 256 256 "Antiqua Prime"
+    win <- createWindow 512 512 "Antiqua Prime"
     let controls = C.Controls [C.mkTriggerAggregate [C.KeyTrigger GLFW.Key'Space]] :: C.Controls C.TriggerAggregate
     tex <- loadTexture "../16x16.png"
     let assets = undefined :: Assets

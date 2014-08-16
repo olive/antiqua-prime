@@ -16,7 +16,7 @@ initGL :: GLFW.Window -> IO ()
 initGL win = do
     glEnable gl_TEXTURE_2D
     glShadeModel gl_SMOOTH
-    glClearColor 1 1 0 0
+    glClearColor 0 0 0 0
     glClearDepth 1
     glEnable gl_DEPTH_TEST
     glDepthFunc gl_LEQUAL
@@ -62,6 +62,9 @@ keyPressed :: GLFW.KeyCallback
 keyPressed win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
 keyPressed _   _               _ _                     _ = return ()
 
+windowClosed :: GLFW.WindowCloseCallback
+windowClosed win = shutdown win
+
 createWindow :: Int -> Int -> String -> IO Window
 createWindow width height title = do
     True <- GLFW.init
@@ -69,7 +72,7 @@ createWindow width height title = do
     Just win <- GLFW.createWindow width height title Nothing Nothing
     GLFW.makeContextCurrent (Just win)
     initGL win
-    --GLFW.setWindowRefreshCallback win (Just (drawScene tex))
+    GLFW.setWindowCloseCallback win (Just windowClosed)
     GLFW.setFramebufferSizeCallback win (Just resizeScene)
     GLFW.setKeyCallback win (Just keyPressed)
     return $ Window win
