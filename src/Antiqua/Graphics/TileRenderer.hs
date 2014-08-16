@@ -9,15 +9,6 @@ import Antiqua.Graphics.Tile
 import Antiqua.Common
 import Antiqua.Graphics.Animation
 
-black :: Color
-black = (0,0,0,255)
-
-white :: Color
-white = (255,255,255,255)
-
-red :: Color
-red = (255, 0, 0, 255)
-
 data TR c t where
     TR :: (Coordinate c) => c -> (Map.Map c t) -> TR c t
 

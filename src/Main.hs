@@ -3,6 +3,7 @@ module Main where
 import Antiqua.Sound.Audio
 import Antiqua.Graphics.Window
 import Antiqua.Common()
+import Antiqua.Graphics.Color()
 import Antiqua.Graphics.Assets
 import qualified Antiqua.Input.Controls as C
 import Antiqua.Game
