@@ -7,7 +7,6 @@ import Antiqua.Input.Controls
 import Antiqua.Graphics.Window
 import Antiqua.Graphics.Assets
 
-import Debug.Trace
 class Updater a b rng where
     get :: a -> b -> rng -> IO (a, rng)
 
@@ -59,7 +58,6 @@ loop controls win state tex g = do
     newControls <- getInput controls win
     let assets = undefined :: Assets
     let ren = draw state tex
-    !(newState, newRng) <- get state (newControls, assets, win) g
+    (newState, newRng) <- get state (newControls, assets, win) g
     useWindow win tex ren
-    trace "hello" (return ())
     loop newControls win newState tex newRng
