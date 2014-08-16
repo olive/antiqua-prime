@@ -13,7 +13,7 @@ import Antiqua.Data.CP437
 import Antiqua.Common
 import Antiqua.Graphics.Rect()
 import Control.Monad.Random
-
+import Antiqua.Geometry.Line()
 data GameState = GameState
 
 instance Drawable GameState where

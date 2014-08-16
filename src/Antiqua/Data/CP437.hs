@@ -18,6 +18,7 @@ data CP437 = C'InvSmile-- | ☺
            | C'DoubleNote-- | ♫
            | C'Sun-- | ☼
            | C'TriRight-- | ►
+           | (►)
            | C'TriLeft-- | ◄
            | C'Vertical-- | ↕
            | C'DoubleExc-- | ‼
