@@ -39,3 +39,6 @@ blue = rgb 0 0 255
 
 darkBlue :: Color
 darkBlue = rgb 0 0 128
+
+yellow :: Color
+yellow = rgb 255 255 0
