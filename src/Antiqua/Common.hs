@@ -8,6 +8,9 @@ type XY = (Int, Int)
 type Texture = GLuint
 type NonEmpty t = (t, [t])
 
+mapHead :: (a -> a) -> NonEmpty a -> NonEmpty a
+mapHead f (x, rest) = (f x, rest)
+
 class Code c where
     getIndex :: c -> Int
     fromChar :: Char -> c
