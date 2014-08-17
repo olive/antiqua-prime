@@ -11,6 +11,7 @@ import qualified Data.Map as Map
 
 import Antiqua.Graphics.TileRenderer
 import Antiqua.Graphics.Tile
+import Antiqua.Graphics.Color
 import Antiqua.Common
 
 data Tileset = Tileset Int Int Int Int

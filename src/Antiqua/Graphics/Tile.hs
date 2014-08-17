@@ -3,6 +3,7 @@ module Antiqua.Graphics.Tile where
 import Control.Monad
 
 import Antiqua.Common
+import Antiqua.Graphics.Color
 
 data Tile a where
     Tile :: (Code c) => c -> Color -> Color -> Tile c

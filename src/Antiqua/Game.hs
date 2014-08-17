@@ -1,7 +1,9 @@
 module Antiqua.Game where
 
+import Control.Applicative((<$>))
 import Control.Exception hiding (handle)
 import Control.Concurrent.Async
+import qualified Data.Map as Map
 import Antiqua.Common
 import Antiqua.Input.Controls
 import Antiqua.Graphics.Window
@@ -42,13 +44,18 @@ instance Game a b rng => Updater (AsyncUpdater (a, rng)) b rng where
 instance Drawable a => Drawable (AsyncUpdater (a, rng)) where
     draw (AsyncUpdater (w, _) _) tex = draw w tex
 
-getInput :: Controls a -> Window -> IO (Controls a)
+getInput :: Controls k a -> Window -> IO (Controls k a)
 getInput (Controls xs) win = do
-    updated <- mapM ((flip update) win) xs
-    return (Controls updated)
+    let z = zip (Map.keys xs) (Map.elems xs)
+    let p = (\(k, c) -> do c' <- update c win
+                           return (k, c')
+                         ) <$> z
+    ps <- sequence p
 
-loop :: (Drawable g, Game g (Controls a, Assets, Window) rng)
-     => Controls a
+    return (Controls (Map.fromList ps))
+
+loop :: (Drawable g, Game g (Controls k a, Assets, Window) rng)
+     => Controls k a
      -> Window
      -> AsyncUpdater (g, rng)
      -> Texture
@@ -59,5 +66,6 @@ loop controls win state tex g = do
     let assets = undefined :: Assets
     let ren = draw state tex
     (newState, newRng) <- get state (newControls, assets, win) g
+    resetScroll
     useWindow win tex ren
     loop newControls win newState tex newRng

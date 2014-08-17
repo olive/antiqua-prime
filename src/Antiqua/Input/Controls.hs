@@ -1,7 +1,14 @@
-module Antiqua.Input.Controls where
+module Antiqua.Input.Controls(
+    Control(..),
+    AnyTrigger(..),
+    mkTriggerAggregate,
+    TriggerAggregate,
+    Controls(..),
+    getControl
+) where
 
 import qualified Graphics.UI.GLFW as GLFW
-
+import qualified Data.Map as Map
 import Antiqua.Graphics.Window
 
 class Control a where
@@ -15,11 +22,16 @@ class Trigger t where
     tisPressed :: t ->  Window ->IO Bool
 
 data AnyTrigger = KeyTrigger GLFW.Key
-               -- | JoyTrigger
+                | WheelTrigger Int
+
 instance Trigger AnyTrigger where
     tisPressed (KeyTrigger a) win = do
         state <- getKey win a
         return $ state == GLFW.KeyState'Pressed
+    tisPressed (WheelTrigger i) _ = do
+        state <- getScroll
+        return $ state == i
+
 
 
 data TriggerAggregate where
@@ -49,8 +61,8 @@ instance Control TriggerAggregate where
         let flag = getFlag ta in
         justPressed ta || (flag > start && flag `mod` inc == 0)
 
-data Controls a where
-    Controls :: Control a => [a] -> Controls a
+data Controls k a where
+    Controls :: (Ord k, Control a) => Map.Map k a -> Controls k a
 
-firstGet :: Control a => Controls a -> a
-firstGet (Controls (x:_)) = x
+getControl :: k -> Controls k a -> a
+getControl key (Controls ctrls) = Map.findWithDefault undefined key ctrls

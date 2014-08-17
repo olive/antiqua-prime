@@ -2,10 +2,15 @@ module Antiqua.Graphics.Window(
     Window,
     createWindow,
     useWindow,
-    getKey
+    getKey,
+    getScroll,
+    resetScroll
 ) where
 
 import qualified Graphics.UI.GLFW as GLFW
+import Data.IORef
+import System.IO.Unsafe
+import Control.DeepSeq
 import Antiqua.Common
 
 import Graphics.Rendering.OpenGL.Raw
@@ -62,6 +67,25 @@ keyPressed :: GLFW.KeyCallback
 keyPressed win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
 keyPressed _   _               _ _                     _ = return ()
 
+{-# NOINLINE scrollRef #-}
+scrollRef :: IORef Int
+scrollRef = unsafePerformIO $ newIORef 0
+
+resetScroll :: IO ()
+resetScroll = do
+    atomicModifyIORef scrollRef (\_ -> (0,()))
+
+getScroll :: IO Int
+getScroll = do
+    state <- readIORef scrollRef
+    return state
+
+scroll :: GLFW.ScrollCallback
+scroll _ _ dy = do
+    let y = (floor . signum) dy
+    a <- atomicModifyIORef scrollRef (\_ -> (y,()))
+    a `deepseq` return ()
+
 windowClosed :: GLFW.WindowCloseCallback
 windowClosed win = shutdown win
 
@@ -71,6 +95,7 @@ createWindow width height title = do
     GLFW.defaultWindowHints
     Just win <- GLFW.createWindow width height title Nothing Nothing
     GLFW.makeContextCurrent (Just win)
+    GLFW.setScrollCallback win (Just scroll)
     initGL win
     GLFW.setWindowCloseCallback win (Just windowClosed)
     GLFW.setFramebufferSizeCallback win (Just resizeScene)
