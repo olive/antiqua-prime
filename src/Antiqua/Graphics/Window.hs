@@ -1,5 +1,6 @@
 module Antiqua.Graphics.Window(
     Window,
+    WindowSettings(..),
     createWindow,
     useWindow,
     getKey,
@@ -35,11 +36,11 @@ initGL win = do
 
 resizeScene :: GLFW.WindowSizeCallback
 resizeScene win w 0 = resizeScene win w 1
-resizeScene _ width height = do
-    glViewport 0 0 (fromIntegral width) (fromIntegral height)
+resizeScene _ w h = do
+    glViewport 0 0 (fromIntegral w) (fromIntegral h)
     glMatrixMode gl_PROJECTION
     glLoadIdentity
-    glOrtho 0 (fromIntegral width) (fromIntegral height) 0 0.1 100
+    glOrtho 0 (fromIntegral w) (fromIntegral h) 0 0.1 100
     glMatrixMode gl_MODELVIEW
     glLoadIdentity
     glFlush
@@ -89,8 +90,13 @@ scroll _ _ dy = do
 windowClosed :: GLFW.WindowCloseCallback
 windowClosed win = shutdown win
 
-createWindow :: Int -> Int -> String -> IO Window
-createWindow width height title = do
+class WindowSettings where
+    width :: Int
+    height :: Int
+    title :: String
+
+createWindow :: WindowSettings => IO Window
+createWindow = do
     True <- GLFW.init
     GLFW.defaultWindowHints
     Just win <- GLFW.createWindow width height title Nothing Nothing

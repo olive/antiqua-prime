@@ -21,7 +21,7 @@ library
                      , Antiqua.Geometry.Line
                      , Antiqua.Graphics.Animation
                      , Antiqua.Graphics.Assets
-                     , Antiqua.Graphics.Color
+                     , Antiqua.Graphics.Colors
                      , Antiqua.Graphics.Rect
                      , Antiqua.Graphics.Renderer
                      , Antiqua.Graphics.Tile
@@ -61,4 +61,5 @@ library
                      , ScopedTypeVariables
                      , FlexibleContexts
                      , BangPatterns
+                     , NullaryTypeClasses
   ghc-options:         -fno-warn-orphans

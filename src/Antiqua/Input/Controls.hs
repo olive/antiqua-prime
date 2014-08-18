@@ -1,14 +1,12 @@
 module Antiqua.Input.Controls(
     Control(..),
     AnyTrigger(..),
-    mkTriggerAggregate,
-    TriggerAggregate,
     Controls(..),
-    getControl
+    mkTriggerAggregate,
+    TriggerAggregate
 ) where
 
 import qualified Graphics.UI.GLFW as GLFW
-import qualified Data.Map as Map
 import Antiqua.Graphics.Window
 
 class Control a where
@@ -17,6 +15,9 @@ class Control a where
     justPressed :: a -> Bool
     justReleased :: a -> Bool
     zips :: a -> Int -> Int -> Bool
+
+class Controls a where
+    updateControls :: a -> Window -> IO a
 
 class Trigger t where
     tisPressed :: t ->  Window ->IO Bool
@@ -61,8 +62,8 @@ instance Control TriggerAggregate where
         let flag = getFlag ta in
         justPressed ta || (flag > start && flag `mod` inc == 0)
 
-data Controls k a where
-    Controls :: (Ord k, Control a) => Map.Map k a -> Controls k a
-
-getControl :: k -> Controls k a -> a
-getControl key (Controls ctrls) = Map.findWithDefault undefined key ctrls
+--data Controls k a where
+--    Controls :: (Ord k, Control a) => Map.Map k a -> Controls k a
+--
+--getControl :: k -> Controls k a -> a
+--getControl key (Controls ctrls) = Map.findWithDefault undefined key ctrls
