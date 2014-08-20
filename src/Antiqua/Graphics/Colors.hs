@@ -1,4 +1,11 @@
-module Antiqua.Graphics.Colors where
+module Antiqua.Graphics.Colors(
+    module Antiqua.Graphics.Colors,
+    Color,
+    rgb,
+    dim,
+    mult,
+    mix
+) where
 
 import Antiqua.Graphics.Color
 

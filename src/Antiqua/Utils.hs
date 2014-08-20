@@ -34,3 +34,10 @@ splitFind g xs =
 headOpt :: [a] -> Maybe a
 headOpt (x:_) = Just x
 headOpt _ = Nothing
+
+
+clamp :: Ord a => a -> a -> a -> a
+clamp mn mx value
+    | value < mn = mn
+    | value > mx = mx
+    | otherwise = value
