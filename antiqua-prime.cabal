@@ -1,5 +1,5 @@
 name:                antiqua-prime
-version:             0.0.1.14
+version:             0.0.1.16
 description:         ascii game library
 homepage:            dogue.in
 license:             MIT
@@ -22,6 +22,7 @@ library
                      , Antiqua.Graphics.Animation
                      , Antiqua.Graphics.Assets
                      , Antiqua.Graphics.Colors
+                     , Antiqua.Graphics.Color
                      , Antiqua.Graphics.Rect
                      , Antiqua.Graphics.Renderer
                      , Antiqua.Graphics.Tile
