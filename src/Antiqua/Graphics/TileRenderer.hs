@@ -10,7 +10,7 @@ import Antiqua.Common
 import Antiqua.Graphics.Animation
 
 data TR c t where
-    TR :: (Coordinate c) => c -> (Map.Map c t) -> TR c t
+    TR :: (Coordinate c k) => c -> (Map.Map c t) -> TR c t
 
 empty :: TR XY (Tile c)
 empty = TR (0,0) Map.empty
@@ -20,7 +20,7 @@ type TileRenderer c = TR XY (Tile c)
 move :: c -> TR c t -> TR c t
 move q (TR p mp) = TR (p |+| q) mp
 
-withMove :: Coordinate c => c -> TR c t -> (TR c t -> TR c t) -> TR c t
+withMove :: Coordinate c k => c -> TR c t -> (TR c t -> TR c t) -> TR c t
 withMove off tr f =  move (neg off) $ move off tr <+< f
 
 (<+) :: Ord c => TR c t -> (c, t) -> TR c t

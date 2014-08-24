@@ -93,3 +93,6 @@ tabulate cols rows f =
 inRange :: Array2d a -> XY -> Bool
 inRange (Array2d cols rows _) (i, j) =
     (i >= 0 && i <= cols - 1 && j >= 0 && j <= rows - 1)
+
+instance Show a => Show (Array2d a) where
+    show arr@(Array2d cols rows _) = foldl (\acc ((x, y), a) -> acc ++ (if y /= 0 && x `mod` cols == 0 then "\n" else "") ++ " " ++ show a) "" arr

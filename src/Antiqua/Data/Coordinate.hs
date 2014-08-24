@@ -5,14 +5,23 @@ import Antiqua.Common
 
 data Direction2 = D'Up | D'Down | D'Left | D'Right
 
-class Coordinate a where
+class Coordinate a b | a -> b where
     (|+|) :: a -> a -> a
+    (|+) :: a -> b -> a
+    (+|) :: a -> b -> a
+
     (|-|) :: a -> a -> a
+    (|-) :: a -> b -> a
+    (-|) :: a -> b -> a
     neg :: a -> a
 
-instance Coordinate XY where
+instance Coordinate XY Int where
     (x, y) |+| (a, b) = (x + a, y + b)
+    (x, y) |+ a = (x + a, y)
+    (x, y) +| a = (x, y + a)
     (x, y) |-| (a, b) = (x - a, y - b)
+    (x, y) |- a = (x - a, y)
+    (x, y) -| a = (x, y - a)
     neg (x, y) = (-x, -y)
 
 
