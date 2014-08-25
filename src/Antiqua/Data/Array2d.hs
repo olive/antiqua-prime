@@ -56,7 +56,7 @@ put a@(Array2d cols rows v) c t =
     let inserted = v Vec.// [(i,t)] in
     select a
            (Array2d cols rows inserted)
-           (not . inRange a $ c)
+           (inRange a $ c)
 
 
 -- | Get an element or return an alternative value.

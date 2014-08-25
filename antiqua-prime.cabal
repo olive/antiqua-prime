@@ -18,6 +18,8 @@ library
                      , Antiqua.Data.CP437
                      , Antiqua.Data.Array2d
                      , Antiqua.Data.Graph
+                     , Antiqua.Data.Flood
+                     , Antiqua.Data.NonEmpty
                      , Antiqua.Geometry.Line
                      , Antiqua.Graphics.Animation
                      , Antiqua.Graphics.Assets
