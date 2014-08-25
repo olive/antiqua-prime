@@ -1,9 +1,9 @@
 module Antiqua.Data.NonEmpty where
 
-import Prelude hiding (concat, head, reverse, foldl)
+import Prelude hiding (concat, head, reverse, foldl, head, tail)
 import qualified Prelude (concat, (++), head, reverse, foldl)
 import Control.Applicative
-
+import Data.Foldable hiding (concat, toList)
 data NonEmpty t = NonEmpty t [t]
 
 
@@ -17,6 +17,10 @@ instance Applicative NonEmpty where
 instance Monad NonEmpty where
     xs >>= f = concat (f <$> xs)
     return = pure
+
+instance Foldable NonEmpty where
+    foldr f seed (NonEmpty x []) = f x seed
+    foldr f seed (NonEmpty x xs) = f x (Prelude.foldr f seed xs)
 
 instance Show a => Show (NonEmpty a) where
     show (NonEmpty x xs) =
@@ -32,9 +36,7 @@ last = head . reverse
 foldl :: (b -> a -> b) -> b -> NonEmpty a -> b
 foldl f seed ne = Prelude.foldl f seed (toList ne)
 
-foldr :: (a -> b -> b) -> b -> NonEmpty a -> b
-foldr f seed (NonEmpty x []) = f x seed
-foldr f seed (NonEmpty x xs) = f x (Prelude.foldr f seed xs)
+
 
 cons :: a -> NonEmpty a -> NonEmpty a
 cons x (NonEmpty y ys) = NonEmpty y (x:ys)
