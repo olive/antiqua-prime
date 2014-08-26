@@ -20,6 +20,7 @@ library
                      , Antiqua.Data.Graph
                      , Antiqua.Data.Flood
                      , Antiqua.Data.NonEmpty
+                     , Antiqua.Geometry.Circle
                      , Antiqua.Geometry.Line
                      , Antiqua.Graphics.Animation
                      , Antiqua.Graphics.Assets
