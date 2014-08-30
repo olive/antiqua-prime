@@ -9,6 +9,7 @@ import Data.Bits
 
 type Line = (XY, XY)
 
+
 bresenham :: XY -> XY -> [XY]
 bresenham (sx, sy) (ex, ey) = runST $ do
     let get = readSTRef

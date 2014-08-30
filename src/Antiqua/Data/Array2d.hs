@@ -7,6 +7,7 @@ module Antiqua.Data.Array2d(
     foldl,
     getOrElse,
     put,
+    putv,
     inRange,
     (<$*>)
 ) where
@@ -58,6 +59,8 @@ put a@(Array2d cols rows v) c t =
            (Array2d cols rows inserted)
            (inRange a $ c)
 
+putv :: a -> Array2d a -> XY -> Array2d a
+putv t arr c = put arr c t
 
 -- | Get an element or return an alternative value.
 getOrElse :: Array2d a -> a -> XY -> a

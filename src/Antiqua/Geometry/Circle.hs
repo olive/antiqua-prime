@@ -7,8 +7,6 @@ import Control.Monad
 import Antiqua.Common
 import Antiqua.Data.Coordinate
 
-import Debug.Trace
-
 bresenham :: XY -> Int -> [XY]
 bresenham (x0, y0) r =  runST $ do
     x <- newSTRef r
