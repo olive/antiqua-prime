@@ -26,10 +26,10 @@ setBg bg (Tile c _ fg) = Tile c bg fg
 setFg :: Color -> Tile a -> Tile a
 setFg fg (Tile c bg _) = Tile c bg fg
 
-mapBg :: Tile a -> (Color -> Color) -> Tile a
-mapBg t f =
+mapBg :: (Color -> Color) -> Tile a -> Tile a
+mapBg f t =
      join (setBg . f . getBg) $ t
 
-mapFg :: Tile a -> (Color -> Color) -> Tile a
-mapFg t f =
+mapFg :: (Color -> Color) -> Tile a -> Tile a
+mapFg f t =
      join (setFg . f . getFg) $ t

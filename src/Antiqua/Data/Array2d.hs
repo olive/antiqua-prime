@@ -4,7 +4,9 @@ module Antiqua.Data.Array2d(
     zipWithIndex,
     tabulate,
     find,
+    foldr,
     foldl,
+    foldl',
     getOrElse,
     put,
     putv,
@@ -12,13 +14,14 @@ module Antiqua.Data.Array2d(
     (<$*>)
 ) where
 
-import Prelude hiding (all, foldl)
+import Prelude hiding (all, foldl, foldr)
 import Control.Applicative
 import Data.Maybe
 import qualified Data.Vector as Vec
 
+import Antiqua.Data.Graph
+import Antiqua.Data.Coordinate
 import Antiqua.Common
-
 import Antiqua.Utils
 
 type Col = Int
@@ -80,6 +83,15 @@ zipWithIndex arr = (,) <$*> arr
 foldl :: (a -> (XY, b) -> a) -> a -> Array2d b -> a
 foldl f x arr = Vec.foldl f x $ (toVec . zipWithIndex) arr
 
+-- | Strict fold left with index.
+foldl' :: (a -> (XY, b) -> a) -> a -> Array2d b -> a
+foldl' f x arr = Vec.foldl' f x $ (toVec . zipWithIndex) arr
+
+-- | Fold left with index.
+foldr :: ((XY, b) -> a -> a) -> a -> Array2d b -> a
+foldr f x arr = Vec.foldr f x $ (toVec . zipWithIndex) arr
+
+
 -- | Finds the index and element satisfying a predicate.
 find :: (a -> Bool) -> Array2d a -> Maybe (XY, a)
 find f arr =
@@ -99,3 +111,5 @@ inRange (Array2d cols rows _) (i, j) =
 
 instance Show a => Show (Array2d a) where
     show arr@(Array2d cols rows _) = foldl (\acc ((x, y), a) -> acc ++ (if y /= 0 && x `mod` cols == 0 then "\n" else "") ++ " " ++ show a) "" arr
+
+

@@ -14,7 +14,7 @@ class Control a where
     isPressed :: a -> Bool
     justPressed :: a -> Bool
     justReleased :: a -> Bool
-    zips :: a -> Int -> Int -> Bool
+    zips :: Int -> Int -> a -> Bool
 
 class Controls a where
     updateControls :: a -> Window -> IO a
@@ -58,7 +58,7 @@ instance Control TriggerAggregate where
     isPressed ta = getFlag ta > 0
     justPressed ta = getFlag ta > 0 && getPrev ta == 0
     justReleased ta = getFlag ta == 0 && getPrev ta > 0
-    zips ta start inc =
+    zips start inc ta =
         let flag = getFlag ta in
         justPressed ta || (flag > start && flag `mod` inc == 0)
 

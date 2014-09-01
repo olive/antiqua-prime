@@ -1,32 +1,43 @@
 module Antiqua.Data.Flood(
     flood,
+    floodFind,
     floodAll
 ) where
 
 import Control.Applicative
 import Antiqua.Data.Graph
 import qualified Data.Set as Set
+import qualified Data.Sequence as Seq
 
 data Flood a = Flood (Set.Set a) -- currently filled region
-                     [a]         -- stack of nodes to branch from
+                     (Seq.Seq a) -- queue of nodes to branch from
 
 mkFlood :: Ord a => a -> Flood a
-mkFlood x = Flood (Set.singleton x) [x]
+mkFlood x = Flood (Set.singleton x) (Seq.singleton x)
 
 flood :: (Graph a c, Ord c)
       => a         -- ^ the graph to be flooded
       -> c         -- ^ the seed coordinate
       -> Set.Set c -- ^ the resulting flooded region
-flood gr c = floodHelper gr (mkFlood c)
+flood gr c =
+   (snd . floodHelper c gr) (mkFlood c)
+
+floodFind :: (Graph a c, Ord c)
+          => a -- ^ the graph to be flooded
+          -> c -- ^ the seed coordinate
+          -> c -- ^ the last point to be flooded
+floodFind gr c =
+    (fst . floodHelper c gr) (mkFlood c)
 
 floodHelper :: (Graph a c, Ord c)
-            => a
+            => c
+            -> a
             -> Flood c
-            -> Set.Set c
-floodHelper gr (Flood filled []) = filled
-floodHelper gr (Flood filled (x:rest)) =
-    floodHelper gr (Flood full q)
-    where q = ns ++ rest
+            -> (c, Set.Set c)
+floodHelper s gr (Flood filled (Seq.viewl -> Seq.EmptyL)) = (s, filled)
+floodHelper s gr (Flood filled (Seq.viewl -> x Seq.:< rest)) =
+    floodHelper x gr (Flood full q)
+    where q = rest Seq.>< (Seq.fromList ns)
           ns = filter seen (fst <$> neighbors gr x)
           full = Set.union filled (Set.fromList ns)
           seen x = Set.notMember x filled

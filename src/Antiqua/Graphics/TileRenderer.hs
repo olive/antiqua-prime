@@ -2,61 +2,75 @@ module Antiqua.Graphics.TileRenderer where
 
 import Prelude hiding (foldl)
 
-import qualified Data.Map as Map
+import Control.Applicative hiding (empty)
+import Control.Monad.ST
+import Control.Monad
+import qualified Data.Array.MArray as Array
 import Data.Foldable
 import Antiqua.Data.Coordinate
 import Antiqua.Graphics.Tile
+import Antiqua.Data.CP437
+import Antiqua.Graphics.Colors
 import Antiqua.Common
 import Antiqua.Graphics.Animation
 
-data TR c t where
-    TR :: (Coordinate c k) => c -> (Map.Map c t) -> TR c t
 
-empty :: TR XY (Tile c)
-empty = TR (0,0) Map.empty
+
+data TR c t s where
+    TR :: c
+       -> s
+       -> TR c t s
+
+
+put x t arr = do
+    Array.writeArray arr x t
+    return arr
+
+empty :: (Array.MArray a e (ST s)) => (Int,Int) -> e -> (ST s) ((Int,Int), a (Int,Int) e)
+empty (x, y) t = do
+    arr <- Array.newArray ((0, 0), (x-1, y-1)) t
+    return $ ((0,0), arr)
+
+getArr (TR _ arr) = arr
 
 type TileRenderer c = TR XY (Tile c)
 
-move :: c -> TR c t -> TR c t
-move q (TR p mp) = TR (p |+| q) mp
+move q (off, arr) = ((off |+| q), arr)
 
-withMove :: Coordinate c k => c -> TR c t -> (TR c t -> TR c t) -> TR c t
-withMove off tr f =  move (neg off) $ move off tr <+< f
+(off, arr) <+ (p, t) = do
+    put (p |-| off) t arr
+    return $ (off, arr)
 
-(<+) :: Ord c => TR c t -> (c, t) -> TR c t
-(TR off mp) <+ (p, t) = TR off $ Map.insert (p |-| off) t mp
+withMove off tr f = do
+    tr' <- move off tr <+< f
+    return $ move (neg off) tr'
 
-(<++) :: (Foldable f, Ord c) => TR c t -> f (c, t) -> TR c t
-tr <++ fs = foldl (<+) tr fs
+(off, arr) <++ fs = foldlM (<+) (off, arr) fs
 
-(|>) :: Ord c => TR c (Tile t) -> (c, (Tile t)) -> TR c (Tile t)
-tr |> (p, (Tile t _ fg)) =
-    tr $> (p, (\(Tile _ bg _) -> Tile t bg fg))
+(off, arr) |> (p, (Tile t _ fg)) =
+    (off, arr) $> (p, (\(Tile _ bg _) -> Tile t bg fg))
 
-(||>) :: (Foldable f, Ord c) => TR c (Tile t) -> f (c, (Tile t)) -> TR c (Tile t)
-tr ||> fs = foldl (|>) tr fs
+(off, arr) ||> fs = foldlM (|>) (off, arr) fs
 
-(<#) :: Ord c => TR c (Tile t) -> (c, Animation t) -> TR c (Tile t)
-tr <# (p, anim) = tr <+ (p, getFrame anim)
+(off, arr) <# (p, anim) = (off, arr) <+ (p, getFrame anim)
 
-(#|>) :: Ord c => TR c (Tile t) -> (c, Animation t) -> TR c (Tile t)
-tr #|> (p, anim) = tr |> (p, getFrame anim)
+(off, arr) #|> (p, anim) = (off, arr) |> (p, getFrame anim)
 
-(<+<) :: TR c t -> (TR c t -> TR c t) -> TR c t
-tr <+< f = f tr
+(off, arr) <+< f = f (off, arr)
 
-(<++<) :: (Foldable f) => TR c t -> f (TR c t -> TR c t) -> TR c t
-tr <++< fs = foldl (<+<) tr fs
+(off, arr) <++< fs = foldlM (<+<) (off, arr) fs
 
-($>) :: Ord c => TR c t -> (c, t -> t) -> TR c t
-(TR off mp) $> (p, f) =
-    TR off $ Map.adjust f (p |-| off) mp
+(off, arr) $> (p, f) = do
+    let i = p |-| off
+    t <- Array.readArray arr i
+    Array.writeArray arr i (f t)
+    return $ (off, arr)
 
-($$>) :: (Foldable f, Ord c) => TR c t -> f (c, t -> t) -> TR c t
-tr $$> fs = foldl ($>) tr fs
+(off, arr) $$> fs = foldlM ($>) (off, arr) fs
 
-(<*<) :: Ord c => TR c t -> TR c t -> TR c t
-(TR off mp1) <*< (TR _ mp2) = TR off $ Map.union mp2 mp1
+--(<*<) :: Ord c => TR c t -> TR c t -> TR c t
+--(TR off mp1) <*< (TR _ mp2) = TR off $ Map.union mp2 mp1
 
-erase :: TR c t -> TR c t
-erase (TR off _) = TR off $ Map.empty
+--erase :: TR c t -> TR c t
+--erase (TR off _) =
+--    let (TR _ mp) = empty in (TR off mp)

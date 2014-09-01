@@ -7,7 +7,7 @@ module Antiqua.Graphics.Renderer(
 import Control.Applicative
 import Graphics.Rendering.OpenGL hiding (Color)
 import Graphics.Rendering.OpenGL.Raw
-import qualified Data.Map as Map
+import qualified Data.Array as Array
 
 import Antiqua.Graphics.TileRenderer
 import Antiqua.Graphics.Tile
@@ -66,15 +66,15 @@ drawFg (Tileset tcols trows tWidth tHeight) (x, y) tile = do
     glVertex2f               x'            y'
 
 
-render :: Code c => Renderer -> TR XY (Tile c) -> IO ()
-render (Renderer txt ts) (TR _ mp) = do
+render :: Code c => Renderer -> [((Int,Int), Tile c)] -> IO ()
+render (Renderer txt ts) mp = do
     glBindTexture gl_TEXTURE_2D txt
     glDisable gl_TEXTURE_2D
     glBegin gl_QUADS
-    sequence_ $ (uncurry (drawBg ts)) <$> Map.assocs mp
+    sequence_ $ (uncurry (drawBg ts)) <$> mp
     glEnd
     glEnable gl_TEXTURE_2D
     glBegin gl_QUADS
-    sequence_ $ (uncurry (drawFg ts)) <$> Map.assocs mp
+    sequence_ $ (uncurry (drawFg ts)) <$> mp
     glEnd
     glFlush
