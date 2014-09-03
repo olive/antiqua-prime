@@ -19,8 +19,6 @@ import Control.Applicative
 import Data.Maybe
 import qualified Data.Vector as Vec
 
-import Antiqua.Data.Graph
-import Antiqua.Data.Coordinate
 import Antiqua.Common
 import Antiqua.Utils
 
@@ -110,6 +108,9 @@ inRange (Array2d cols rows _) (i, j) =
     (i >= 0 && i <= cols - 1 && j >= 0 && j <= rows - 1)
 
 instance Show a => Show (Array2d a) where
-    show arr@(Array2d cols rows _) = foldl (\acc ((x, y), a) -> acc ++ (if y /= 0 && x `mod` cols == 0 then "\n" else "") ++ " " ++ show a) "" arr
+    show arr@(Array2d cols _ _) =
+        foldl (\acc ((x, y), a) -> acc ++ (if y /= 0 && x `mod` cols == 0
+                                           then "\n"
+                                           else "") ++ " " ++ show a) "" arr
 
 

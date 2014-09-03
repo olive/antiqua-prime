@@ -3,9 +3,7 @@ module Antiqua.Geometry.Circle where
 import Data.STRef
 import Control.Applicative
 import Control.Monad.ST
-import Control.Monad
 import Antiqua.Common
-import Antiqua.Data.Coordinate
 
 bresenham :: XY -> Int -> [XY]
 bresenham (x0, y0) r =  runST $ do

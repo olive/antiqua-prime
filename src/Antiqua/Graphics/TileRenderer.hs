@@ -2,15 +2,12 @@ module Antiqua.Graphics.TileRenderer where
 
 import Prelude hiding (foldl)
 
-import Control.Applicative hiding (empty)
 import Control.Monad.ST
-import Control.Monad
 import qualified Data.Array.MArray as Array
+import qualified Data.Array.ST as ArrayST
 import Data.Foldable
 import Antiqua.Data.Coordinate
 import Antiqua.Graphics.Tile
-import Antiqua.Data.CP437
-import Antiqua.Graphics.Colors
 import Antiqua.Common
 import Antiqua.Graphics.Animation
 
@@ -26,7 +23,7 @@ put x t arr = do
     Array.writeArray arr x t
     return arr
 
-empty :: (Array.MArray a e (ST s)) => (Int,Int) -> e -> (ST s) ((Int,Int), a (Int,Int) e)
+empty :: (Array.MArray (ArrayST.STArray s) (Tile c) (ST s)) => (Int,Int) -> (Tile c) -> (ST s) ((Int,Int), ArrayST.STArray s (Int,Int) (Tile c))
 empty (x, y) t = do
     arr <- Array.newArray ((0, 0), (x-1, y-1)) t
     return $ ((0,0), arr)
@@ -68,7 +65,7 @@ withMove off tr f = do
 
 (off, arr) $$> fs = foldlM ($>) (off, arr) fs
 
---(<*<) :: Ord c => TR c t -> TR c t -> TR c t
+--(<*<) ::  Ord c => TR c t -> TR c t -> TR c t
 --(TR off mp1) <*< (TR _ mp2) = TR off $ Map.union mp2 mp1
 
 --erase :: TR c t -> TR c t

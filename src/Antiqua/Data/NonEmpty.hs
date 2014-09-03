@@ -1,7 +1,7 @@
 module Antiqua.Data.NonEmpty where
 
 import Prelude hiding (concat, head, reverse, foldl, head, tail)
-import qualified Prelude (concat, (++), head, reverse, foldl)
+import qualified Prelude (concat, reverse, foldl)
 import Control.Applicative
 import Data.Foldable hiding (concat, toList)
 data NonEmpty t = NonEmpty t [t]

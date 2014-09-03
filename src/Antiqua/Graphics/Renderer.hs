@@ -7,74 +7,172 @@ module Antiqua.Graphics.Renderer(
 import Control.Applicative
 import Graphics.Rendering.OpenGL hiding (Color)
 import Graphics.Rendering.OpenGL.Raw
-import qualified Data.Array as Array
-
-import Antiqua.Graphics.TileRenderer
 import Antiqua.Graphics.Tile
 import Antiqua.Graphics.Color
 import Antiqua.Common
+import Data.Array.Storable
+import Data.Foldable
+import Data.Bits
 
 data Tileset = Tileset Int Int Int Int
 data Renderer = Renderer Texture Tileset
+type Four a = (a, a, a, a)
+--drawBg :: Code c => Four (GLfloat, GLfloat) -> Tile c -> IO ()
+--drawBg (v1, v2, v3, v4) tile = do
+--    let bg = getBg tile
+--    color4 bg
+--    v2f v1
+--    color4 bg
+--    v2f v2
+--    color4 bg
+--    v2f v3
+--    color4 bg
+--    v2f v4
 
-drawBg :: Code c => Tileset -> XY -> Tile c -> IO ()
-drawBg (Tileset _ _ tWidth tHeight) (x, y) tile = do
-    let (x', y') = (fromIntegral (x*tWidth),
-                    fromIntegral (y*tHeight))
-    let (xw', yh') = (fromIntegral tWidth, fromIntegral tHeight)
-    let bg = getBg tile
-    color4 bg
-    glVertex2f             x'    (y' + yh')
-    color4 bg
-    glVertex2f     (x' + xw')    (y' + yh')
-    color4 bg
-    glVertex2f     (x' + xw')            y'
-    color4 bg
-    glVertex2f             x'            y'
 
-color4 :: Color -> IO ()
-color4 (r, g, b, a) = do
-    glColor4ub (fromIntegral r)
-               (fromIntegral g)
-               (fromIntegral b)
-               (fromIntegral a)
+--color4 :: Color -> IO ()
+--color4 (r, g, b, a) = do
+--    glColor4ub (fromIntegral r)
+--               (fromIntegral g)
+--               (fromIntegral b)
+--               (fromIntegral a)
+--t2f = uncurry glTexCoord2f
+--v2f = uncurry glVertex2f
+--drawFg :: Code c => Four (GLfloat, GLfloat) -> Four (GLfloat, GLfloat) -> Tile c -> --IO ()
+--drawFg (v1, v2, v3, v4) (t1, t2, t3, t4) tile = do
+--    let fg = getFg tile
+--    color4 fg
+--    t2f t1
+--    v2f v1
+--    color4 fg
+--    t2f t2
+--    v2f v2
+--    color4 fg
+--    t2f t3
+--    v2f v3
+--    color4 fg
+--    t2f t4
+--    v2f v4
 
-drawFg :: Code c => Tileset -> XY -> Tile c -> IO ()
-drawFg (Tileset tcols trows tWidth tHeight) (x, y) tile = do
+--cacheTex :: ??? -> (Int -> (GLfloat, GLfloat))
+
+--toTexCoord :: Tileset -> Int -> Four (GLfloat, GLfloat)
+--toTexCoord (Tileset tcols trows tWidth tHeight) code =
+--    let totalWidth = fromIntegral (tWidth * tcols) :: GLfloat in
+--    let totalHeight = fromIntegral (tHeight * trows) :: GLfloat in
+--    let (tx, ty) = (code `mod` tcols, code `div` tcols) in
+--    let (tx', ty') = (fromIntegral (tx*tWidth) / totalWidth,
+--                      fromIntegral (ty*tHeight) / totalHeight) in
+--    let (tw', th') = (fromIntegral tWidth / totalWidth,
+--                      fromIntegral tHeight / totalHeight) in
+--    ( (    tx',ty'+th')
+--    , (tx'+tw',ty'+th')
+--    , (tx'+tw',    ty')
+--    , (    tx',    ty')
+--    )
+
+--toVertex :: Tileset -> (Int,Int) -> Four (GLfloat, GLfloat)
+--toVertex (Tileset _ _ tWidth tHeight) (x, y) =
+--    let (x', y') = (fromIntegral (x*tWidth), fromIntegral (y*tHeight)) in
+--    let (xw', yh') = (fromIntegral tWidth, fromIntegral tHeight) in
+--    ( (    x', y'+yh')
+--    , (x'+xw', y'+yh')
+--    , (x'+xw',     y')
+--    , (    x',     y')
+--    )
+
+writeCoord (Tileset tcols trows tWidth tHeight) code i arr = do
     let totalWidth = fromIntegral (tWidth * tcols) :: GLfloat
     let totalHeight = fromIntegral (tHeight * trows) :: GLfloat
-    let code = getIndex $ getCode tile
     let (tx, ty) = (code `mod` tcols, code `div` tcols)
     let (tx', ty') = (fromIntegral (tx*tWidth) / totalWidth,
                       fromIntegral (ty*tHeight) / totalHeight)
-    let (x', y') = (fromIntegral (x*tWidth), fromIntegral (y*tHeight))
     let (tw', th') = (fromIntegral tWidth / totalWidth,
                       fromIntegral tHeight / totalHeight)
-    let (xw', yh') = (fromIntegral tWidth, fromIntegral tHeight)
-    let fg = getFg tile
-    color4 fg
-    glTexCoord2f           tx'    (ty' + th')
-    glVertex2f              x'    ( y' + yh')
-    color4 fg
-    glTexCoord2f   (tx' + tw')    (ty' + th')
-    glVertex2f     ( x' + xw')    ( y' + yh')
-    color4 fg
-    glTexCoord2f   (tx' + tw')            ty'
-    glVertex2f     ( x' + xw')            y'
-    color4 fg
-    glTexCoord2f            tx'           ty'
-    glVertex2f               x'            y'
+    writeArray arr (i+0) (    tx')
+    writeArray arr (i+1) (ty'+th')
+    writeArray arr (i+2) (tx'+tw')
+    writeArray arr (i+3) (ty'+th')
+    writeArray arr (i+4) (tx'+tw')
+    writeArray arr (i+5) (    ty')
+    writeArray arr (i+6) (    tx')
+    writeArray arr (i+7) (    ty')
+    return arr
 
+
+--writeVertex :: Tileset -> (Int,Int) -> x -> x
+writeVertex (Tileset _ _ tWidth tHeight) (x, y) i arr = do
+    let (x', y') = (fromIntegral (x*tWidth), fromIntegral (y*tHeight))
+    let (xw', yh') = (fromIntegral tWidth, fromIntegral tHeight)
+    writeArray arr (i+0) (    x')
+    writeArray arr (i+1) (y'+yh')
+    writeArray arr (i+2) (x'+xw')
+    writeArray arr (i+3) (y'+yh')
+    writeArray arr (i+4) (x'+xw')
+    writeArray arr (i+5) (    y')
+    writeArray arr (i+6) (    x')
+    writeArray arr (i+7) (    y')
+    return arr
+
+writeColor (r, g, b, _) i arr = do
+    let r' = fromIntegral r
+    let g' = fromIntegral g
+    let b' = fromIntegral b
+
+
+    writeArray arr (i+0) r'
+    writeArray arr (i+1) g'
+    writeArray arr (i+2) b'
+    writeArray arr (i+3) r'
+    writeArray arr (i+4) g'
+    writeArray arr (i+5) b'
+    writeArray arr (i+6) r'
+    writeArray arr (i+7) g'
+    writeArray arr (i+8) b'
+    writeArray arr (i+9) r'
+    writeArray arr (i+10) g'
+    writeArray arr (i+11) b'
+    return arr
+
+mapFst :: (a -> c) -> [(a, b)] -> [c]
+mapFst f xs = f.fst <$> xs
+
+mapSnd :: (b -> c) -> [(a, b)] -> [c]
+mapSnd f xs = f.snd <$> xs
+
+uncurry3 :: (a -> b -> c -> d) -> ((a, b, c) -> d)
+uncurry3 f ~(x, y, z) = f x y z
 
 render :: Code c => Renderer -> [((Int,Int), Tile c)] -> IO ()
 render (Renderer txt ts) mp = do
-    glBindTexture gl_TEXTURE_2D txt
-    glDisable gl_TEXTURE_2D
-    glBegin gl_QUADS
-    sequence_ $ (uncurry (drawBg ts)) <$> mp
-    glEnd
-    glEnable gl_TEXTURE_2D
-    glBegin gl_QUADS
-    sequence_ $ (uncurry (drawFg ts)) <$> mp
-    glEnd
-    glFlush
+    let len = length mp
+    vertArray <- newArray_ (0,len*8) :: IO (StorableArray Int GLfloat)
+    texArray <- newArray_ (0,len*8) :: IO (StorableArray Int GLfloat)
+    colorBG <- newArray_ (0,len*12) :: IO (StorableArray Int GLint)
+    colorFG <- newArray_ (0,len*12) :: IO (StorableArray Int GLint)
+    foldlM (\arr ((pos, t), i) -> writeVertex ts pos (i*8) arr) vertArray (zip mp [0..len-1])
+    foldlM (\arr ((pos, t), i) -> writeCoord ts (getIndex . getCode $ t) (i*8) arr) texArray (zip mp [0..len-1])
+    foldlM (\arr ((pos, t), i) -> writeColor (getFg t) (i*4) arr) colorFG (zip mp [0..len-1])
+    foldlM (\arr ((pos, t), i) -> writeColor (getBg t) (i*4) arr) colorBG (zip mp [0..len-1])
+    --let !verts = mapFst (toVertex ts) mp
+    --let !texs = mapSnd (toTexCoord ts . getIndex . getCode) mp
+    --let !tiles = snd <$> mp
+    withStorableArray vertArray $ \vert -> do
+      withStorableArray texArray  $ \tex -> do
+        withStorableArray colorFG $ \fg -> do
+          withStorableArray colorBG $ \bg -> do
+            glBindTexture gl_TEXTURE_2D txt
+            glDisable gl_TEXTURE_2D
+            glEnable gl_VERTEX_ARRAY
+            glVertexPointer 2 gl_FLOAT 0 vert
+            glEnable gl_COLOR_ARRAY
+            glColorPointer 3 gl_INT 0 bg
+            glDrawArrays gl_QUADS 0 (fromIntegral (len*4))
+            glEnable gl_TEXTURE_2D
+            glVertexPointer 2 gl_FLOAT 0 vert
+            glTexCoordPointer 2 gl_FLOAT 0 tex
+            glColorPointer 3 gl_INT 0 fg
+            glDrawArrays gl_QUADS 0 (fromIntegral (len*4))
+            glDisable gl_VERTEX_ARRAY
+            glFlush
+

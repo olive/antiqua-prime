@@ -34,13 +34,13 @@ floodHelper :: (Graph a c, Ord c)
             -> a
             -> Flood c
             -> (c, Set.Set c)
-floodHelper s gr (Flood filled (Seq.viewl -> Seq.EmptyL)) = (s, filled)
-floodHelper s gr (Flood filled (Seq.viewl -> x Seq.:< rest)) =
+floodHelper s _ (Flood filled (Seq.viewl -> Seq.EmptyL)) = (s, filled)
+floodHelper _ gr (Flood filled (Seq.viewl -> x Seq.:< rest)) =
     floodHelper x gr (Flood full q)
     where q = rest Seq.>< (Seq.fromList ns)
           ns = filter seen (fst <$> neighbors gr x)
           full = Set.union filled (Set.fromList ns)
-          seen x = Set.notMember x filled
+          seen y = Set.notMember y filled
 
 floodAll :: (Graph a c, Ord c)
          => a           -- ^ the graph to be flooded

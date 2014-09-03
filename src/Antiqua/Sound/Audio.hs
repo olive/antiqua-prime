@@ -113,8 +113,8 @@ runAudio action =
         (Just device) <- AL.openDevice Nothing
         (Just context) <- AL.createContext device []
         AL.currentContext AL.$= Just context
-        let am = mkAudioManager
-        am' <- load am A'Thing "file1.wav"
+        --let am = mkAudioManager
+        --am' <- load am A'Thing "file1.wav"
         --play am' A'Thing
         action
         AL.closeDevice device
