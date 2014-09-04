@@ -115,9 +115,9 @@ writeVertex (Tileset _ _ tWidth tHeight) (x, y) i arr = do
     return arr
 
 writeColor (r, g, b, _) i arr = do
-    let r' = fromIntegral r
-    let g' = fromIntegral g
-    let b' = fromIntegral b
+    let r' = fromIntegral r / fromIntegral 256 :: GLfloat
+    let g' = fromIntegral g / fromIntegral 256 :: GLfloat
+    let b' = fromIntegral b / fromIntegral 256 :: GLfloat
 
 
     writeArray arr (i+0) r'
@@ -143,17 +143,26 @@ mapSnd f xs = f.snd <$> xs
 uncurry3 :: (a -> b -> c -> d) -> ((a, b, c) -> d)
 uncurry3 f ~(x, y, z) = f x y z
 
+len = 48*48
+
+vertArrayp = do
+    let mp = [ ((i, j), undefined) | i <- [0..48-1], j <- [0..48-1]]
+    vert <- newArray_ (0,len*8) :: IO (StorableArray Int GLfloat)
+    foldlM (\arr ((pos, t), i) -> writeVertex (Tileset 16 16 16 16) pos (i*8) arr) vert (zip mp [0..len-1])
+texArrayp = newArray_ (0,len*8) :: IO (StorableArray Int GLfloat)
+colorBGp = newArray_ (0,len*12) :: IO (StorableArray Int GLfloat)
+colorFGp = newArray_ (0,len*12) :: IO (StorableArray Int GLfloat)
+
 render :: Code c => Renderer -> [((Int,Int), Tile c)] -> IO ()
 render (Renderer txt ts) mp = do
     let len = length mp
-    vertArray <- newArray_ (0,len*8) :: IO (StorableArray Int GLfloat)
-    texArray <- newArray_ (0,len*8) :: IO (StorableArray Int GLfloat)
-    colorBG <- newArray_ (0,len*12) :: IO (StorableArray Int GLint)
-    colorFG <- newArray_ (0,len*12) :: IO (StorableArray Int GLint)
-    foldlM (\arr ((pos, t), i) -> writeVertex ts pos (i*8) arr) vertArray (zip mp [0..len-1])
+    vertArray <- vertArrayp
+    texArray <- texArrayp
+    colorBG <- colorBGp
+    colorFG <- colorFGp
     foldlM (\arr ((pos, t), i) -> writeCoord ts (getIndex . getCode $ t) (i*8) arr) texArray (zip mp [0..len-1])
-    foldlM (\arr ((pos, t), i) -> writeColor (getFg t) (i*4) arr) colorFG (zip mp [0..len-1])
-    foldlM (\arr ((pos, t), i) -> writeColor (getBg t) (i*4) arr) colorBG (zip mp [0..len-1])
+    foldlM (\arr ((pos, t), i) -> writeColor (getFg t) (i*12) arr) colorFG (zip mp [0..3*(len `div` 2) - 1])
+    foldlM (\arr ((pos, t), i) -> writeColor (getBg t) (i*12) arr) colorBG (zip mp [0..3*(len `div` 2) - 1])
     --let !verts = mapFst (toVertex ts) mp
     --let !texs = mapSnd (toTexCoord ts . getIndex . getCode) mp
     --let !tiles = snd <$> mp
@@ -161,18 +170,22 @@ render (Renderer txt ts) mp = do
       withStorableArray texArray  $ \tex -> do
         withStorableArray colorFG $ \fg -> do
           withStorableArray colorBG $ \bg -> do
-            glBindTexture gl_TEXTURE_2D txt
             glDisable gl_TEXTURE_2D
-            glEnable gl_VERTEX_ARRAY
+            glEnableClientState gl_VERTEX_ARRAY
+            glEnableClientState gl_COLOR_ARRAY
+            glDisableClientState gl_TEXTURE_COORD_ARRAY
             glVertexPointer 2 gl_FLOAT 0 vert
-            glEnable gl_COLOR_ARRAY
-            glColorPointer 3 gl_INT 0 bg
+            glColorPointer 3 gl_FLOAT 0 bg
             glDrawArrays gl_QUADS 0 (fromIntegral (len*4))
             glEnable gl_TEXTURE_2D
+            glBindTexture gl_TEXTURE_2D txt
+            glEnableClientState gl_TEXTURE_COORD_ARRAY
             glVertexPointer 2 gl_FLOAT 0 vert
             glTexCoordPointer 2 gl_FLOAT 0 tex
-            glColorPointer 3 gl_INT 0 fg
+            glColorPointer 3 gl_FLOAT 0 fg
             glDrawArrays gl_QUADS 0 (fromIntegral (len*4))
-            glDisable gl_VERTEX_ARRAY
+            glDisableClientState gl_VERTEX_ARRAY
+            glDisableClientState gl_COLOR_ARRAY
+            glDisableClientState gl_TEXTURE_COORD_ARRAY
             glFlush
 
